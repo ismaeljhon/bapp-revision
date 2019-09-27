@@ -12,8 +12,8 @@ export default new Router({
         },
         {
             path: '/',
-            name: 'landing-page',
-            component: require('@/components/LandingPage').default
+            name: 'home',
+            component: require('@/views/Home').default
         },
         {
             path: '*',
