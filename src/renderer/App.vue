@@ -5,7 +5,7 @@
             <b-navbar-nav class="ml-auto">
                 <b-nav-item-dropdown right>
                     <template slot="text"><font-awesome-icon icon="cog" /></template>
-                    <b-dropdown-item href="#">Logout</b-dropdown-item>
+                    <b-dropdown-item href="#" :disabled="$store.getters.TIMER_STARTED">Logout</b-dropdown-item>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
         </b-navbar>
