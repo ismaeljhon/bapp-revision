@@ -1,11 +1,11 @@
 <template>
     <b-row>
         <b-col cols="12" class="mt-3">
-            <b-form-group label="Project">
-                <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="projects" v-model="form.project_id" placeholder="Select a Project"></v-select>
+            <b-form-group label="Project" :invalid-feedback="veeErrors.first('project')" :state="!veeErrors.has('project')">
+                <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :reduce="project => project.id" :options="projects" v-model="form.project_id" placeholder="Select a Project" name="project" v-validate="{ required: true }"></v-select>
             </b-form-group>
-            <b-form-group label="Task">
-                <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="tasks" v-model="form.task_id" placeholder="Pick a Task"></v-select>
+            <b-form-group label="Task" :invalid-feedback="veeErrors.first('task')" :state="!veeErrors.has('task')">
+                <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :reduce="task => task.id" :options="tasks" v-model="form.task_id" placeholder="Pick a Task" name="task" v-validate="{ required: true }"></v-select>
             </b-form-group>
             <b-form-group label="Notes">
                 <b-form-textarea :disabled="$store.getters.TIMER_STARTED" v-model="form.notes" rows="3" max-rows="6"></b-form-textarea>
@@ -34,29 +34,57 @@
     </b-row>
 </template>
 <script>
+import RestApiService from '../services/RestApiService.js';
+
+import _forEach from 'lodash/foreach';
+import _filter from 'lodash/filter';
+
 export default {
     name: 'home',
     data() {
         return {
             form: {},
-            projects: [
-                { id: 1, name: "Project 1" },
-                { id: 2, name: "Project 2" },
-            ],
-            tasks: [
-                { id: 1, name: "Task 1" },
-                { id: 2, name: "Task 2" },
-            ]
+            tasks: [],
+            api: {
+                project: new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/')
+            }
         }
     },
     methods: {
         setupTimer() {
-            this.$store.commit('SET_TIMER_STATUS');
-            if (this.$store.getters.TIMER_STARTED) {
-                this.startTimer();
-            } else {
-                this.stopTimer();
-            }
+            this.$validator.validateAll().then(noerrors => {
+                if (noerrors) {
+                    console.log(this.form);
+                    this.$store.commit('SET_TIMER_STATUS');
+                    if (this.$store.getters.TIMER_STARTED) {
+                        this.startTimer();
+                    } else {
+                        this.stopTimer();
+                    }
+                }
+            });
+        },
+
+        getProjectTasks(projectId) {
+            new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/' + projectId + "/tasks/").index().then(response => {
+                let tasks = [];
+
+                _forEach(response.data.tasks, task => {
+                    if (!task.completed) {
+                        tasks.push({
+                            id: task.id_string,
+                            name: task.name,
+                        })
+                    }
+                });
+                this.tasks = tasks;
+            })
+        }
+    },
+    watch: {
+        "form.project_id": function(projectId) {
+            this.getProjectTasks(projectId);
+            
         }
     },
     computed: {
@@ -68,8 +96,21 @@ export default {
         },
         timerButtonIcon() {
             return this.timerButton[this.getCurrentTimerStatus].icon;
-        } 
-    }
+        },
+        projects() {
+            let projects = [];
+
+            _forEach(this.$store.getters.PROJECTS, project => {
+                projects.push({
+                    id: project.id_string,
+                    name: project.name,
+                    status: project.status
+                })
+            });
+
+            return projects;
+        }
+    },
 }
 </script>
 <style scoped>

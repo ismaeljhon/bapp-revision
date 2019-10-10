@@ -64,6 +64,7 @@
     "moment": "^2.24.0",
     "screenshot-monitor-capture": "^0.8.3",
     "sweetalert": "^2.1.2",
+    "vee-validate": "^2.2.15",
     "vue": "^2.6.10",
     "vue-electron": "^1.0.6",
     "vue-excel-export": "^0.1.3",
