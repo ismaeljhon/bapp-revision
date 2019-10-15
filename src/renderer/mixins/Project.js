@@ -11,17 +11,13 @@ let User = {
     methods: {
         getProjects(fetchFromApi = false) {
             if (!localStorage.ZOHO_PROJECTS || fetchFromApi) {
-                this.project_api.index().then(response => {
+                return this.project_api.index().then(response => {
                     localStorage.ZOHO_PROJECTS = JSON.stringify(response.data.projects);
                 }).catch(error => {
                     // console.log(error);
                 });
             }
-
-            let projects = JSON.parse(localStorage.ZOHO_PROJECTS);
-
-            this.$store.commit('SET_PROJECTS', projects);
-            return projects;
+            return true;
         },
     }
 };

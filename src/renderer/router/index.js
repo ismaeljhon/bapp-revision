@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 	
-export default new Router({
+const router = new Router({
 	routes: [
         {
             path: '/login',
@@ -16,4 +16,13 @@ export default new Router({
             component: require('@/views/Home').default
         },
 	]
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.fullPath != '/login' && !localStorage.ZOHO_EMAIL) {
+        next('/login');
+    }
+    next();
 })
+
+export default router;
