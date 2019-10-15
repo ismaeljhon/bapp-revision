@@ -26,7 +26,7 @@
   export default {
     name: 'bickert-tracker-app',
     mounted: async function() {
-        await this.getProjects();
+        await this.fetchProjects();
     },
     methods: {
         logout() {

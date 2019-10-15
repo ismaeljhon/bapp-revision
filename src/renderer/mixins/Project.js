@@ -1,6 +1,7 @@
 import RestApiService from '../services/RestApiService.js';
 import _forEach from 'lodash/foreach';
 import _filter from 'lodash/filter';
+import swal from 'sweetalert';
 
 let User = {
     data() {
@@ -9,16 +10,19 @@ let User = {
         }
     },
     methods: {
-        getProjects(fetchFromApi = false) {
+        fetchProjects(fetchFromApi = false) {
             if (!localStorage.ZOHO_PROJECTS || fetchFromApi) {
                 return this.project_api.index().then(response => {
                     localStorage.ZOHO_PROJECTS = JSON.stringify(response.data.projects);
                 }).catch(error => {
-                    // console.log(error);
+                    swal(error)
                 });
             }
             return true;
         },
+        getProjects() {
+            return JSON.parse(localStorage.ZOHO_PROJECTS);
+        }
     }
 };
 

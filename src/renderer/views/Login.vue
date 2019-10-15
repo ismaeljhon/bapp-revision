@@ -24,7 +24,7 @@
             onSubmit(){
                 this.$validator.validateAll().then(noerrors => {
                     if (noerrors) {
-                        let users = JSON.parse(localStorage.ZOHO_USERS);
+                        let users = this.getUsers();
 
                         if (_find(users, o => {
                             return o.email == this.form.email;
@@ -46,7 +46,7 @@
         },
         mounted: async function() {
             this.disableBtn = true;
-            await this.getAllUsers();
+            await this.fetchUsers();
             this.users = localStorage.ZOHO_USERS;
             this.disableBtn = false;
         }

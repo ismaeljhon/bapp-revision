@@ -98,8 +98,9 @@ export default {
         },
         projects() {
             let projects = [];
+            let fetchedProject = this.getProjects();
 
-            _forEach(this.$store.getters.PROJECTS, project => {
+            _forEach(fetchedProject, project => {
                 projects.push({
                     id: project.id_string,
                     name: project.name,
