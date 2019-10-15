@@ -20,13 +20,13 @@
         <b-col cols="6" class="mt-4">
             <b-card header="Latest Screenshot">
                 <span>
-                    <img src="../assets/screen.jpg" style="max-width: 100%" />
+                    <!-- <img src="../assets/screen.jpg" style="max-width: 100%" /> -->
                 </span>
             </b-card>
         </b-col>
         <b-col cols="6" class="mt-4">
             <b-card header="Work Summary">
-                <strong>Total: </strong><span>8h 00m</span>
+                <strong>Today: </strong><span>8h 00m</span>
                 <br>
                 <strong>This Week: </strong><span>40h 00m</span>
             </b-card>
@@ -54,7 +54,6 @@ export default {
         setupTimer() {
             this.$validator.validateAll().then(noerrors => {
                 if (noerrors) {
-                    console.log(this.form);
                     this.$store.commit('SET_TIMER_STATUS');
                     if (this.$store.getters.TIMER_STARTED) {
                         this.startTimer();

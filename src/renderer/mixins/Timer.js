@@ -25,6 +25,8 @@ let Timer = {
         startTimer() {
             if(this.running) return;
 
+            console.log('timer started')
+
             if (this.timeBegan === null) {
                 this.stopTimer();
                 this.timeBegan = new Date();
@@ -44,6 +46,8 @@ let Timer = {
             console.log(this.time);
         },
         stopTimer() {
+            if (!this.running) return;
+
             this.running = false;
             clearInterval(this.started);
             this.stoppedDuration = 0;

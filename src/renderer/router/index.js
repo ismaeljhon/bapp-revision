@@ -15,9 +15,5 @@ export default new Router({
             name: 'home',
             component: require('@/views/Home').default
         },
-        {
-            path: '*',
-            redirect: '/'
-        }
 	]
 })
