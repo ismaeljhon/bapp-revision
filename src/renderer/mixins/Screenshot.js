@@ -3,23 +3,27 @@ const fs = require('fs');
 import { rootPath } from 'electron-root-path';
 import moment from 'moment';
 import _find from 'lodash/find';
-import _replace from 'lodash/replace';
+import _camelCase from 'lodash/camelCase';
 
 let Screenshot = {
     methods: {
-        captureScreenshot() {
+        async captureScreenshot() {
             let users = JSON.parse(localStorage.ZOHO_USERS);
             let currentUser =  _find(users, o => {
                 return o.email == localStorage.ZOHO_EMAIL;
             });
 
-            takeScreenshot("image/png").then((data) => {
-                fs.writeFile(rootPath + "/screenshots/"+ _replace(currentUser.name, ' ', '') +"-" + moment().format('DDMMYYYY-hhmmss') + ".jpg", data.buffer, (error) => {
+            let screenshotFile = rootPath + "/screenshots/"+ _camelCase(currentUser.name) +"-" + moment().format('DDMMYYYY-hhmmss') + ".jpg";
+
+            await takeScreenshot("image/jpg").then((data) => {
+                fs.writeFile(screenshotFile, data.buffer, (error) => {
                     if (error) {
                         console.error(error);
                     }
                 });
             });
+
+            this.$store.commit('SET_SCREENSHOT', { latest: screenshotFile });
         }
     }
 };
