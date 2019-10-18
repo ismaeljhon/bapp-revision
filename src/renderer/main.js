@@ -51,6 +51,7 @@ Vue.use(VeeValidate, {
 
 import swal from 'sweetalert';
 
+
 /* eslint-disable no-new */
 new Vue({
   router,

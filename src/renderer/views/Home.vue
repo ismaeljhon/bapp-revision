@@ -16,16 +16,12 @@
                 <font-awesome-icon :icon="timerButtonIcon" class="mr-2" />{{ timerButtonText }}
             </b-button>
             <span class="ml-2" v-show="$store.getters.TIMER_STARTED">{{ time }}</span>
-            <b-button variant="info" class="float-right mt-2" size="sm" v-b-tooltip title="Take Screenshot" @click.prevent="captureScreenshot">
+            <b-button variant="info" class="float-right mt-2" size="sm" v-b-tooltip title="Take Screenshot Now" @click.prevent="captureScreenshot">
                 <font-awesome-icon icon="camera" class="" />
             </b-button>
         </b-col>
         <b-col cols="6" class="mt-4">
-            <b-card header="Latest Screenshot">
-                <span>
-                    <!-- <img src="../assets/screen.jpg" style="max-width: 100%" /> -->
-                </span>
-            </b-card>
+            <latest-screenshot ref="latestScreenshot" />
         </b-col>
         <b-col cols="6" class="mt-4">
             <b-card header="Work Summary">
@@ -39,11 +35,16 @@
 <script>
 import RestApiService from '../services/RestApiService.js';
 
+import LatestScreenshot from './partials/LatestScreenshot.vue'
+
 import _forEach from 'lodash/foreach';
 import _filter from 'lodash/filter';
 
 export default {
     name: 'home',
+    components: {
+        'latest-screenshot': LatestScreenshot
+    },
     data() {
         return {
             form: {},
@@ -112,7 +113,7 @@ export default {
             });
 
             return projects;
-        }
+        },
     },
 }
 </script>

@@ -7,7 +7,7 @@ import _camelCase from 'lodash/camelCase';
 
 let Screenshot = {
     methods: {
-        async captureScreenshot() {
+        captureScreenshot() {
             let users = JSON.parse(localStorage.ZOHO_USERS);
             let currentUser =  _find(users, o => {
                 return o.email == localStorage.ZOHO_EMAIL;
@@ -15,15 +15,19 @@ let Screenshot = {
 
             let screenshotFile = rootPath + "/screenshots/"+ _camelCase(currentUser.name) +"-" + moment().format('DDMMYYYY-hhmmss') + ".jpg";
 
-            await takeScreenshot("image/jpg").then((data) => {
+            takeScreenshot("image/jpg").then((data) => {
                 fs.writeFile(screenshotFile, data.buffer, (error) => {
                     if (error) {
                         console.error(error);
                     }
+
+                    this.$store.commit('SET_SCREENSHOT', { latest: screenshotFile });
                 });
             });
+        },
 
-            this.$store.commit('SET_SCREENSHOT', { latest: screenshotFile });
+        pushScreenshot() {
+            
         }
     }
 };
