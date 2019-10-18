@@ -16,6 +16,9 @@
                 <font-awesome-icon :icon="timerButtonIcon" class="mr-2" />{{ timerButtonText }}
             </b-button>
             <span class="ml-2" v-show="$store.getters.TIMER_STARTED">{{ time }}</span>
+            <b-button variant="info" class="float-right mt-2" size="sm" v-b-tooltip title="Take Screenshot" @click.prevent="captureScreenshot">
+                <font-awesome-icon icon="camera" class="" />
+            </b-button>
         </b-col>
         <b-col cols="6" class="mt-4">
             <b-card header="Latest Screenshot">

@@ -27,6 +27,7 @@
     name: 'bickert-tracker-app',
     mounted: async function() {
         await this.fetchProjects();
+        await this.fetchUsers();
     },
     methods: {
         logout() {

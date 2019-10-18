@@ -39,6 +39,9 @@ Vue.mixin(Project);
 import User from '@/mixins/User';
 Vue.mixin(User)
 
+import Screenshot from '@/mixins/Screenshot';
+Vue.mixin(Screenshot)
+
 import VeeValidate from 'vee-validate';
 Vue.use(VeeValidate, {
     inject: true,

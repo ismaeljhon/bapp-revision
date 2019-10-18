@@ -38,7 +38,8 @@ let RestApiService = class RestApiService{
                         refresh_token: refreshToken,
                         client_id: process.env.CLIENT_ID,
                         client_secret: process.env.CLIENT_SECRET,
-                        grant_type: 'refresh_token'
+                        grant_type: 'refresh_token',
+                        redirect_uri: 'http://localhost'
                     },
                     {
                         headers: {
