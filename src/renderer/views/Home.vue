@@ -47,7 +47,11 @@ export default {
     },
     data() {
         return {
-            form: {},
+            form: {
+                project_id: '',
+                task_id: '',
+                timeConsumed: ''
+            },
             tasks: [],
             api: {
                 project: new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/')
@@ -63,7 +67,9 @@ export default {
                         this.startTimer();
                     } else {
                         let timeConsumed = this.stopTimer();
-                        this.recordTimelog(timeConsumed);
+                        this.form.timeConsumed = timeConsumed;
+                        
+                        this.recordTimelog(this.form);
                     }
                 }
             });

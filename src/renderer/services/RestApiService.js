@@ -39,7 +39,6 @@ let RestApiService = class RestApiService{
                         client_id: process.env.CLIENT_ID,
                         client_secret: process.env.CLIENT_SECRET,
                         grant_type: 'refresh_token',
-                        redirect_uri: 'http://localhost'
                     },
                     {
                         headers: {
@@ -63,7 +62,12 @@ let RestApiService = class RestApiService{
         return axios.get(this.prefix)
     }
 
-    save(data){
+    save(data, isQueryType = false) {
+
+        if (isQueryType) {
+            return axios.post(this.prefix, null, data);
+        }
+
         return axios.post(this.prefix, data)
     }
 
