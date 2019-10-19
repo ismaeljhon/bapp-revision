@@ -25,8 +25,6 @@ let Timer = {
         startTimer() {
             if(this.running) return;
 
-            console.log('timer started')
-
             if (this.timeBegan === null) {
                 this.stopTimer();
                 this.timeBegan = new Date();
@@ -43,10 +41,11 @@ let Timer = {
             this.running = false;
             this.timeStopped = new Date();
             clearInterval(this.started);
-            console.log(this.time);
         },
         stopTimer() {
             if (!this.running) return;
+            
+            let timeConsumed = this.time;
 
             this.running = false;
             clearInterval(this.started);
@@ -54,6 +53,8 @@ let Timer = {
             this.timeBegan = null;
             this.timeStopped = null;
             this.time = "00:00:00";
+
+            return timeConsumed;
         },
         clockRunning() {
             let currentTime = new Date()

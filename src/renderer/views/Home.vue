@@ -62,7 +62,8 @@ export default {
                     if (this.$store.getters.TIMER_STARTED) {
                         this.startTimer();
                     } else {
-                        this.stopTimer();
+                        let timeConsumed = this.stopTimer();
+                        this.recordTimelog(timeConsumed);
                     }
                 }
             });

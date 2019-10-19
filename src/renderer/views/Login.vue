@@ -26,10 +26,10 @@
                     if (noerrors) {
                         let users = this.getUsers();
 
-                        if (_find(users, o => {
-                            return o.email == this.form.email;
-                        })) {
-                            localStorage.ZOHO_EMAIL = this.form.email;
+                        let currentUser = _find(users, o => { return o.email == this.form.email });
+
+                        if (currentUser) {
+                            localStorage.ZOHO_CURRENT_USER = JSON.stringify(currentUser);
                             this.$router.push('/');
                         } else {
                             swal({

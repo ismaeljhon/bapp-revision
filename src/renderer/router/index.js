@@ -19,7 +19,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.fullPath != '/login' && !localStorage.ZOHO_EMAIL) {
+    if (to.fullPath != '/login' && !localStorage.ZOHO_CURRENT_USER) {
         next('/login');
     }
     next();

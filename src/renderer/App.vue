@@ -39,7 +39,7 @@
             })
             .then((loggedOut) => {
                 if (loggedOut) {
-                    localStorage.ZOHO_EMAIL = '',
+                    localStorage.ZOHO_CURRENT_USER = '',
                     this.$router.push('/login')
                 }
             });

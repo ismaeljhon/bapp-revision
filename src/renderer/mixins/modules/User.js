@@ -1,8 +1,8 @@
-import RestApiService from '../services/RestApiService';
+import RestApiService from '@/services/RestApiService';
 let User = {
     methods: {
         validateCurrentUserEmail() {
-            if (!localStorage.ZOHO_EMAIL) 
+            if (!localStorage.ZOHO_CURRENT_USER) 
                 return false;
             return true;
         },
@@ -18,6 +18,9 @@ let User = {
         },
         getUsers() {
             return JSON.parse(localStorage.ZOHO_USERS);
+        },
+        getCurrentUser() {
+            return JSON.parse(localStorage.ZOHO_CURRENT_USER);
         }
     }
 };
