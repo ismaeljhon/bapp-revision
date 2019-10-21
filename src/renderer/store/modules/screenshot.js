@@ -11,7 +11,7 @@ const mutations = {
         _assign(state.screenshot, screenshot);
 
         if (screenshot.latest) {
-            localStorage.setItem('LATEST_SCREENSHOT', screenshot.latest);
+            localStorage.setItem('ZOHO_LATEST_SCREENSHOT', screenshot.latest);
         }
     }
 }

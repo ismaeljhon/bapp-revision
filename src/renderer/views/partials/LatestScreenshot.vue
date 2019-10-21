@@ -17,7 +17,7 @@ export default {
     },
     computed: {
         latestScreenshot() {
-            let latestScreenshot = this.$store.getters.SCREENSHOT.latest || localStorage.LATEST_SCREENSHOT || '';
+            let latestScreenshot = this.$store.getters.SCREENSHOT.latest || localStorage.ZOHO_LATEST_SCREENSHOT || '';
 
             if (latestScreenshot) {
                 latestScreenshot = 'file:\\\\' + latestScreenshot;

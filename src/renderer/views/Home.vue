@@ -55,21 +55,40 @@ export default {
             tasks: [],
             api: {
                 project: new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/')
-            }
+            },
+            recordTimelogtoLocaInterval: null,
+            screenshotInterval: null,
         }
     },
     methods: {
         setupTimer() {
-            this.$validator.validateAll().then(noerrors => {
+            this.$validator.validateAll().then(async noerrors => {
                 if (noerrors) {
                     this.$store.commit('SET_TIMER_STATUS');
                     if (this.$store.getters.TIMER_STARTED) {
                         this.startTimer();
+
+                        /** Record Timesheet every 1 min */
+                        this.recordTimelogtoLocaInterval = setInterval(function() {
+                            let timeConsumed = this.getCurrentTimer();
+                            this.form.timeConsumed = timeConsumed;
+                            this.recordTimelog(this.form);
+                        }.bind(this), 60000);
+
+                        this.screenshotInterval = setInterval(async function() {
+                            await this.captureScreenshot();
+                            await this.pushScreenshot();
+                        }.bind(this), 60000)
                     } else {
                         let timeConsumed = this.stopTimer();
+                        console.log("stopped", timeConsumed);
                         this.form.timeConsumed = timeConsumed;
                         
-                        this.recordTimelog(this.form);
+                        await this.pushTimelog(this.form);
+
+                        localStorage.ZOHO_LAST_TIME_LOG = '';
+                        clearInterval(this.recordTimelogtoLocaInterval);
+                        clearInterval(this.screenshotInterval);
                     }
                 }
             });
@@ -122,6 +141,10 @@ export default {
             return projects;
         },
     },
+    mounted() {
+        clearInterval(this.recordTimelogtoLocaInterval);
+        clearInterval(this.screenshotInterval);
+    }
 }
 </script>
 <style scoped>

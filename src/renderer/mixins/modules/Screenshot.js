@@ -7,23 +7,21 @@ import _camelCase from 'lodash/camelCase';
 
 let Screenshot = {
     methods: {
-        captureScreenshot() {
+        async captureScreenshot() {
             let currentUser =  this.getCurrentUser();
             let screenshotFile = rootPath + "/screenshots/"+ _camelCase(currentUser.name) +"-" + moment().format('DDMMYYYY-hhmmss') + ".jpg";
 
-            takeScreenshot("image/jpg").then((data) => {
-                fs.writeFile(screenshotFile, data.buffer, (error) => {
-                    if (error) {
-                        console.error(error);
-                    }
-
-                    this.$store.commit('SET_SCREENSHOT', { latest: screenshotFile });
-                });
+            const data = await takeScreenshot("image/jpg");
+            fs.writeFile(screenshotFile, data.buffer, (error) => {
+                if (error) {
+                    console.error(error);
+                }
+                this.$store.commit('SET_SCREENSHOT', { latest: screenshotFile });
             });
         },
 
         pushScreenshot() {
-            
+            console.log("Screenshot pushed");
         }
     }
 };

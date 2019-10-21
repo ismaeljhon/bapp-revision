@@ -56,6 +56,9 @@ let Timer = {
 
             return timeConsumed;
         },
+        getCurrentTimer() {
+            return this.time;
+        },
         clockRunning() {
             let currentTime = new Date()
             , timeElapsed = new Date(currentTime - this.timeBegan - this.stoppedDuration)
