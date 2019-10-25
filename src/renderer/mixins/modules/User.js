@@ -1,4 +1,5 @@
 import RestApiService from '@/services/RestApiService';
+import swal from 'sweetalert';
 let User = {
     methods: {
         validateCurrentUserEmail() {

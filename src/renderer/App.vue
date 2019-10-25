@@ -28,6 +28,7 @@
     mounted: async function() {
         await this.fetchProjects();
         await this.fetchUsers();
+        await this.checkPendingTimelogs();
     },
     methods: {
         logout() {

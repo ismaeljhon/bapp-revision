@@ -1,5 +1,4 @@
 import RestApiService from '@/services/RestApiService.js';
-import _forEach from 'lodash/foreach';
 import _filter from 'lodash/filter';
 import swal from 'sweetalert';
 

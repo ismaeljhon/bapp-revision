@@ -1,14 +1,15 @@
 import RestApiService from '@/services/RestApiService';
 import moment from 'moment';
 import _join from 'lodash/join';
+import _assign from 'lodash/assign';
+import _find from 'lodash/find';
 import swal from 'sweetalert';
 
 let Timelog = {
     methods: {
         recordTimelog(rawData) {
-            let timelogData = this.getTimelogData(rawData);
-            console.log("record timesheet to localstorage", rawData)
-            localStorage.setItem('ZOHO_LAST_TIME_LOG', JSON.stringify(timelogData));
+            _assign(rawData, this.getTimelogData(rawData));
+            localStorage.setItem('ZOHO_LAST_TIME_LOG', JSON.stringify(rawData));
             return true;
         },
         pushTimelog(rawData) {
@@ -17,7 +18,7 @@ let Timelog = {
             return new RestApiService('/portal/' + process.env.PORTAL_ID + "/projects/" + rawData.project_id + "/tasks/" + rawData.task_id + "/logs/")
                 .save({ params: timelogData }, true)
                     .then(response => {
-                        console.log(response)
+                        localStorage.ZOHO_LAST_TIME_LOG = '';
                     }).catch(error => {
                         swal(error);
                     });
@@ -35,6 +36,40 @@ let Timelog = {
                 bill_status: 'Billable',
                 notes: data.notes
             };
+        },
+        checkPendingTimelogs() {
+            let pendingTimelogs = localStorage.ZOHO_LAST_TIME_LOG;
+
+            if(!pendingTimelogs) return false; 
+
+            pendingTimelogs = JSON.parse(pendingTimelogs);
+            let currentUser = this.getCurrentUser();
+
+            if (currentUser.id == pendingTimelogs.owner) {
+                swal({
+                    title: "Unsaved Timelog",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                    text: pendingTimelogs.project.name + "\n\n" + pendingTimelogs.task.name + "\n\n" + "Time Spent: " + pendingTimelogs.hours,
+                    icon: "warning",
+                    buttons: {
+                        do_not_push: {
+                            text: 'Do not Push',
+                            value: false
+                        },
+                        push: {
+                            text: 'Push Timelog',
+                            value: true
+                        }
+                    },
+                }).then((pushTimelog) => {
+                    if (pushTimelog) {
+                        this.pushTimelog(pendingTimelogs);
+                    } else {
+                        localStorage.ZOHO_LAST_TIME_LOG = '';
+                    }
+                });
+            }
         }
     }
 }
