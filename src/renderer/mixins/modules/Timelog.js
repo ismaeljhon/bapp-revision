@@ -1,5 +1,5 @@
 import RestApiService from '@/services/RestApiService';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import _join from 'lodash/join';
 import _assign from 'lodash/assign';
 import _find from 'lodash/find';
@@ -73,14 +73,14 @@ let Timelog = {
         },
         fetchWeeklyTimelogs() {
             let params = {
-                users_list: '689213868',
+                users_list: this.getCurrentUser().id,
                 view_type: 'week',
-                date: '10-27-2019',
+                date: moment().tz('America/Edmonton').format('MM-DD-YYYY'),
                 bill_status: 'All',
                 component_type: 'task'
             };
 
-            new RestApiService('/portal/' + process.env.PORTAL_ID + '/logs')
+            return new RestApiService('/portal/' + process.env.PORTAL_ID + '/logs')
             .index(params)
                 .then(response => {
                     localStorage.setItem('ZOHO_WEEKLY_TIMELOGS', JSON.stringify(response.data.timelogs));
@@ -88,7 +88,25 @@ let Timelog = {
         },
         getWeeklyTimelogs() {
             return JSON.parse(localStorage.ZOHO_WEEKLY_TIMELOGS);
-        }
+        },
+        fetchDailyTimelogs() {
+            let params = {
+                users_list: this.getCurrentUser().id,
+                view_type: 'day',
+                date: moment().tz('America/Edmonton').format('MM-DD-YYYY'),
+                bill_status: 'All',
+                component_type: 'task'
+            };
+
+            return new RestApiService('/portal/' + process.env.PORTAL_ID + '/logs')
+            .index(params)
+                .then(response => {
+                    localStorage.setItem('ZOHO_DAILY_TIMELOGS', JSON.stringify(response.data.timelogs));
+                });
+        },
+        getDailyTimelogs() {
+            return JSON.parse(localStorage.ZOHO_DAILY_TIMELOGS);
+        },
     }
 }
 

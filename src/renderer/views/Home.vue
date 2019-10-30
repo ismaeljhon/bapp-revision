@@ -25,7 +25,7 @@
         </b-col>
         <b-col cols="6" class="mt-4">
             <b-card header="Work Summary">
-                <strong>Today: </strong><span>0h 00m</span>
+                <strong>Today: </strong><span>{{ dailyTimeLogs }}</span>
                 <br>
                 <strong>This Week: </strong><span>{{ weeklyTotalTimelogs }}</span>
             </b-card>
@@ -145,14 +145,19 @@ export default {
         },
         weeklyTotalTimelogs() {
             let weeklyTimelogs = this.getWeeklyTimelogs();
-            return weeklyTimelogs.grandtotal ? moment(weeklyTimelogs.grandtotal, 'HH:mm').format('HH[h] mm[m]') : '0h 0m';
+            return weeklyTimelogs.grandtotal ? moment(weeklyTimelogs.grandtotal, 'HH:mm').format('H[h] mm[m]') : '0h 0m';
+        },
+        dailyTimeLogs() {
+            let dailyTimeLogs = this.getDailyTimelogs();
+            return dailyTimeLogs.grandtotal ? moment(dailyTimeLogs.grandtotal, 'HH:mm').format('H[h] mm[m]') : '0h 0m';
         }
     },
-    mounted() {
+    async mounted() {
         clearInterval(this.recordTimelogtoLocaInterval);
         clearInterval(this.screenshotInterval);
 
-        this.fetchWeeklyTimelogs();
+        await this.fetchWeeklyTimelogs();
+        await this.fetchDailyTimelogs();
     }
 }
 </script>
