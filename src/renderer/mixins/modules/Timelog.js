@@ -70,6 +70,24 @@ let Timelog = {
                     }
                 });
             }
+        },
+        fetchWeeklyTimelogs() {
+            let params = {
+                users_list: '689213868',
+                view_type: 'week',
+                date: '10-27-2019',
+                bill_status: 'All',
+                component_type: 'task'
+            };
+
+            new RestApiService('/portal/' + process.env.PORTAL_ID + '/logs')
+            .index(params)
+                .then(response => {
+                    localStorage.setItem('ZOHO_WEEKLY_TIMELOGS', JSON.stringify(response.data.timelogs));
+                });
+        },
+        getWeeklyTimelogs() {
+            return JSON.parse(localStorage.ZOHO_WEEKLY_TIMELOGS);
         }
     }
 }

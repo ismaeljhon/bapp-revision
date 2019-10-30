@@ -25,9 +25,9 @@
         </b-col>
         <b-col cols="6" class="mt-4">
             <b-card header="Work Summary">
-                <strong>Today: </strong><span>8h 00m</span>
+                <strong>Today: </strong><span>0h 00m</span>
                 <br>
-                <strong>This Week: </strong><span>40h 00m</span>
+                <strong>This Week: </strong><span>{{ weeklyTotalTimelogs }}</span>
             </b-card>
         </b-col>
     </b-row>
@@ -38,6 +38,7 @@ import RestApiService from '../services/RestApiService.js';
 import LatestScreenshot from './partials/LatestScreenshot.vue'
 import _filter from 'lodash/filter';
 import _assign from 'lodash/assign';
+import moment from 'moment';
 
 export default {
     name: 'home',
@@ -142,10 +143,16 @@ export default {
 
             return projects;
         },
+        weeklyTotalTimelogs() {
+            let weeklyTimelogs = this.getWeeklyTimelogs();
+            return weeklyTimelogs.grandtotal ? moment(weeklyTimelogs.grandtotal, 'HH:mm').format('HH[h] mm[m]') : '0h 0m';
+        }
     },
     mounted() {
         clearInterval(this.recordTimelogtoLocaInterval);
         clearInterval(this.screenshotInterval);
+
+        this.fetchWeeklyTimelogs();
     }
 }
 </script>

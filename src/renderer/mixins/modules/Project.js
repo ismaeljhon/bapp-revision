@@ -2,7 +2,7 @@ import RestApiService from '@/services/RestApiService.js';
 import _filter from 'lodash/filter';
 import swal from 'sweetalert';
 
-let User = {
+let Project = {
     data() {
         return {
             project_api: new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/')
@@ -25,4 +25,4 @@ let User = {
     }
 };
 
-export default User;
+export default Project;

@@ -58,8 +58,8 @@ let RestApiService = class RestApiService{
         });
     }
 
-    index(){
-        return axios.get(this.prefix)
+    index(params = {}) {
+        return axios.get(this.prefix, { params: params })
     }
 
     save(data, isQueryType = false) {

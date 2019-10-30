@@ -37,7 +37,6 @@ Vue.use(VeeValidate, {
 import swal from 'sweetalert';
 import mixins from './mixins'
 
-
 /* eslint-disable no-new */
 new Vue({
   router,
