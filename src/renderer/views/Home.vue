@@ -27,7 +27,7 @@
             <b-card header="Work Summary">
                 <strong>Today: </strong><span>{{ dailyTimeLogs }}</span>
                 <br>
-                <strong>This Week: </strong><span>{{ weeklyTotalTimelogs }}</span>
+                <strong>This Week: </strong><span>{{ weeklyTimelogs }}</span>
             </b-card>
         </b-col>
     </b-row>
@@ -54,6 +54,8 @@ export default {
                 task_id: '',
                 timeConsumed: ''
             },
+            weeklyTimelogs: '',
+            dailyTimeLogs: '',
             tasks: [],
             api: {
                 project: new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/')
@@ -112,6 +114,15 @@ export default {
                 })
                 this.tasks = tasks;
             })
+        },
+
+        setWeeklyTimelogs() {
+            let weeklyTimelogs = this.getWeeklyTimelogs();
+            this.weeklyTimelogs = weeklyTimelogs.grandtotal ? this.customHourFormat(weeklyTimelogs.grandtotal) : '0h 0m'
+        },
+        setDailyTimelogs() {
+            let dailyTimeLogs = this.getDailyTimelogs();
+            this.dailyTimeLogs =  dailyTimeLogs.grandtotal ? this.customHourFormat(dailyTimeLogs.grandtotal) : '0h 0m';
         }
     },
     watch: {
@@ -143,14 +154,6 @@ export default {
 
             return projects;
         },
-        weeklyTotalTimelogs() {
-            let weeklyTimelogs = this.getWeeklyTimelogs();
-            return weeklyTimelogs.grandtotal ? moment(weeklyTimelogs.grandtotal, 'HH:mm').format('H[h] mm[m]') : '0h 0m';
-        },
-        dailyTimeLogs() {
-            let dailyTimeLogs = this.getDailyTimelogs();
-            return dailyTimeLogs.grandtotal ? moment(dailyTimeLogs.grandtotal, 'HH:mm').format('H[h] mm[m]') : '0h 0m';
-        }
     },
     async mounted() {
         clearInterval(this.recordTimelogtoLocaInterval);
@@ -158,6 +161,8 @@ export default {
 
         await this.fetchWeeklyTimelogs();
         await this.fetchDailyTimelogs();
+        this.setWeeklyTimelogs();
+        this.setDailyTimelogs();
     }
 }
 </script>

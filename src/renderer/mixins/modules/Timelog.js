@@ -101,7 +101,7 @@ let Timelog = {
             return new RestApiService('/portal/' + process.env.PORTAL_ID + '/logs')
             .index(params)
                 .then(response => {
-                    localStorage.setItem('ZOHO_DAILY_TIMELOGS', JSON.stringify(response.data.timelogs));
+                    localStorage.setItem('ZOHO_DAILY_TIMELOGS', JSON.stringify(response.data.timelogs || {}));
                 });
         },
         getDailyTimelogs() {
