@@ -1,5 +1,6 @@
 import RestApiService from '@/services/RestApiService';
 import swal from 'sweetalert';
+import Log from '@/shared/Log'
 let User = {
     methods: {
         validateCurrentUserEmail() {
@@ -12,7 +13,7 @@ let User = {
                 return new RestApiService('/portal/' + process.env.PORTAL_ID + '/users/').index().then(response => {
                     localStorage.setItem('ZOHO_USERS', JSON.stringify(response.data.users));
                 }).catch(error => {
-                    swal(error);
+                    Log.error(error.data.error.message);
                 })
             }
             return true;

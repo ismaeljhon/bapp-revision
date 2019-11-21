@@ -11,6 +11,8 @@
 
 <script>
     import _find from 'lodash/find';
+    import Log from '@/shared/Log'
+
     export default {
         name: 'login',
         data() {
@@ -32,11 +34,7 @@
                             localStorage.ZOHO_CURRENT_USER = JSON.stringify(currentUser);
                             this.$router.push('/');
                         } else {
-                            swal({
-                                title: "Email not registered",
-                                icon: 'warning',
-                                dangerMode: true,
-                            })
+                            Log.warning('Email not Registered', true)
                         }
                     }
 
