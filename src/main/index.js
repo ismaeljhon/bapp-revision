@@ -22,7 +22,8 @@ function createWindow () {
     width: 480,
     useContentSize: true,
     webPreferences: {
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true
     }
   })
 
