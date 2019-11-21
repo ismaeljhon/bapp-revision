@@ -11,8 +11,7 @@ const EnvStorageService = (function(){
         localStorage.setItem('ZOHO_ACCESS_TOKEN', tokenObj.access_token);
     }
     function _getAccessToken() {
-        // return localStorage.getItem('ZOHO_ACCESS_TOKEN');
-        return process.env.ACCESS_TOKEN;
+        return localStorage.getItem('ZOHO_ACCESS_TOKEN');
     }
     function _getRefreshToken() {
         return process.env.REFRESH_TOKEN;
