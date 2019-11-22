@@ -38,7 +38,6 @@ import RestApiService from '../services/RestApiService.js';
 import LatestScreenshot from './partials/LatestScreenshot.vue'
 import _filter from 'lodash/filter';
 import _assign from 'lodash/assign';
-import moment from 'moment';
 
 export default {
     name: 'home',

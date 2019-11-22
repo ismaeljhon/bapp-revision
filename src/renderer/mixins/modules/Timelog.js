@@ -75,7 +75,7 @@ let Timelog = {
             let params = {
                 users_list: this.getCurrentUser().id,
                 view_type: 'week',
-                date: moment().tz('America/Edmonton').format('MM-DD-YYYY'),
+                date: moment().format('MM-DD-YYYY'),
                 bill_status: 'All',
                 component_type: 'task'
             };

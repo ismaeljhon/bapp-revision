@@ -1,9 +1,9 @@
 import { takeScreenshot } from "screenshot-monitor-capture";
 const fs = require('fs');
 import { rootPath } from 'electron-root-path';
-import moment from 'moment';
 import _find from 'lodash/find';
 import _camelCase from 'lodash/camelCase';
+import moment from 'moment-timezone';
 
 let Screenshot = {
     methods: {
