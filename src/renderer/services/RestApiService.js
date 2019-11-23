@@ -37,7 +37,6 @@ let RestApiService = class RestApiService{
                     .then(res => {
                         if (res.status === 201 || res.status === 200) {
                             storageService.setToken(res.data);
-                            // axios.defaults.headers.common['Authorization'] = 'Bearer ' + storageService.getAccessToken();
                             return axios(originalRequest);
                         }
                     })

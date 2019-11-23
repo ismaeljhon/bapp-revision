@@ -34,6 +34,7 @@
 </template>
 <script>
 import RestApiService from '../services/RestApiService.js';
+import AuthenticationV1 from '@/helpers/AuthenticationV1'
 
 import LatestScreenshot from './partials/LatestScreenshot.vue'
 import _filter from 'lodash/filter';
@@ -157,6 +158,12 @@ export default {
     async mounted() {
         clearInterval(this.recordTimelogtoLocaInterval);
         clearInterval(this.screenshotInterval);
+
+        if (!process.env.ZOHO_ACCESS_TOKEN_V1) {
+            Log.error("No Authentication V1 key set, please reach out for some help")
+            return false;
+        }
+        await new AuthenticationV1().validate();
 
         await this.fetchWeeklyTimelogs();
         await this.fetchDailyTimelogs();

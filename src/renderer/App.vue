@@ -28,6 +28,7 @@
     mounted: async function() {
         await this.fetchProjects();
         await this.checkPendingTimelogs();
+        await this.fetchUsers();
     },
     methods: {
         logout() {
@@ -39,8 +40,8 @@
             })
             .then((loggedOut) => {
                 if (loggedOut) {
-                    localStorage.ZOHO_CURRENT_USER = '',
-                    this.$router.push('/login')
+                    localStorage.ZOHO_CURRENT_USER_V1 = '',
+                    this.$router.push('/loginV1')
                 }
             });
             

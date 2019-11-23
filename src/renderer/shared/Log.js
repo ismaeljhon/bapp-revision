@@ -20,7 +20,7 @@ const Log = {
         }
         console.log(msg);
     },
-    error(msg, withPrompt = false) {
+    error(msg, withPrompt = true) {
         if (withPrompt) {
             swal({
                 icon: 'error',
