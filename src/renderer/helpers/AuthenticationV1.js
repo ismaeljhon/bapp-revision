@@ -7,7 +7,7 @@ class AuthenticationV1 {
 	}
 
 	validate() {
-        return axios.get("https://people.zoho.com/people/api/forms/P_EmployeeView/records?authtoken=" + process.env.ZOHO_ACCESS_TOKEN_V1 + "&searchColumn=EMPLOYEEMAILALIAS&searchValue=" + localStorage.ZOHO_EMAIL_V1)
+        return axios.get("https://people.zoho.com/people/api/forms/P_EmployeeView/records?authtoken=" + localStorage.ZOHO_ACCESS_TOKEN_V1 + "&searchColumn=EMPLOYEEMAILALIAS&searchValue=" + localStorage.ZOHO_EMAIL_V1)
         .then(response => {
 			Log.info("Authentication Success using email: " + localStorage.ZOHO_EMAIL_V1);
             localStorage.ZOHO_CURRENT_USER_V1 = JSON.stringify(response.data[0]);
