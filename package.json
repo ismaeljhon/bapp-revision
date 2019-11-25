@@ -1,8 +1,8 @@
 {
   "name": "bickert-tracker-app",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "Ismael Jalbuna <ismael@bickertmanagement.com>",
-  "description": "This a BMI Tracker App",
+  "description": "BMI Tracker App - Updated and compressed",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
