@@ -5,7 +5,7 @@ let RestApiService = class RestApiService{
     constructor(prefix) {
         const storageService = EnvStorageService.getService();
 
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + storageService.getAccessToken();
+        // axios.defaults.headers.common['Authorization'] = 'Bearer ' + storageService.getAccessToken();
 
         this.prefix = process.env.PROJECTS_API + prefix
 

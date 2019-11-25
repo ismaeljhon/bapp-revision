@@ -86,7 +86,6 @@ export default {
 
                         this.screenshotInterval = setInterval(async function() {
                             await this.captureScreenshot();
-                            await this.pushScreenshot();
                         }.bind(this), 65000)
                     } else {
                         let timeConsumed = this.stopTimer();

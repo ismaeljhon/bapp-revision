@@ -12,7 +12,6 @@
     </b-card>
 </template>
 <script>
-import RestApiServiceV1 from '@/services/RestApiServiceV1';
 import AuthenticationV1 from '@/helpers/AuthenticationV1';
 import axios from 'axios';
 import _find from 'lodash/find';
@@ -29,7 +28,8 @@ export default {
             messagesMapping: {
                 INVALID_PASSWORD: 'Your password is invalid',
                 INVALID_CREDENTIALS: 'Your credentials are invalid',
-                NO_SUCH_USER: 'Account not found'
+                NO_SUCH_USER: 'Account not found',
+                EXCEEDED_MAXIMUM_ALLOWED_AUTHTOKENS: 'Your account exceeded the maximum allowed zoho account authentication token, kindly contact IT support for this matter'
             }
         }
     },
