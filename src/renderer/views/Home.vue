@@ -163,7 +163,7 @@ export default {
             Log.error("No Authentication V1 key set, please reach out for some help")
             return false;
         }
-        await new AuthenticationV1().validate();
+        new AuthenticationV1().validate();
 
         await this.fetchWeeklyTimelogs();
         await this.fetchDailyTimelogs();
