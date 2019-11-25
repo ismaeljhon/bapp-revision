@@ -5,6 +5,7 @@ import _find from 'lodash/find';
 import _camelCase from 'lodash/camelCase';
 import moment from 'moment-timezone';
 import axios from 'axios';
+import Log from '@/shared/Log'
 
 let Screenshot = {
     methods: {
@@ -72,7 +73,7 @@ let Screenshot = {
 				}
 
 				if (!response.data)
-					return LOG.error("Error on fetching the image blob");
+					return Log.error("Error on fetching the image blob");
 
 				// translating the response data to BLOB object
 				let imageBlob = new Blob([response.data]);
@@ -84,7 +85,7 @@ let Screenshot = {
 				await axiosInstance.post('https://people.zoho.com/people/api/files/uploadFileMultipart', formData, { 
                     headers: { 'Content-Type': 'multipart/form-data'} });
 
-				LOG.info("Screenshot ["+filename+"] successfully pushed");
+				Log.info("Screenshot ["+filename+"] successfully pushed");
 
 			});
         },
