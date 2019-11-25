@@ -10,7 +10,6 @@ import Log from '@/shared/Log'
 let Screenshot = {
     methods: {
         async captureScreenshot() {
-            console.log("capture", rootPath)
             let currentUser =  this.getCurrentUser();
             let screenshotFile = _camelCase(currentUser.name) +"-" + moment().format('DDMMYYYY-hhmmss') + ".jpg";
             let screenshotFilePath = rootPath + "/screenshots/"+ screenshotFile;
@@ -18,17 +17,15 @@ let Screenshot = {
             const data = await takeScreenshot("image/jpg");
             fs.writeFile(screenshotFilePath, data.buffer, (error) => {
                 if (error) {
-                    console.error(error);
+                    Log.error(error);
                 }
                 this.$store.commit('SET_SCREENSHOT', { latest: screenshotFilePath });
                 
-                console.log("write file")
                 this.pushScreenshot(screenshotFile)
             });
         },
 
         async pushScreenshot(filename) {
-            console.log("push")
             let screenshot = this.$store.getters.SCREENSHOT.latest;
 
             if (!screenshot) 
