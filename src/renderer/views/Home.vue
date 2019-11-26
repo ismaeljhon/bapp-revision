@@ -82,11 +82,11 @@ export default {
                             let timeConsumed = this.getCurrentTimer();
                             this.form.timeConsumed = timeConsumed;
                             this.recordTimelog(this.form);
-                        }.bind(this), 65000);
+                        }.bind(this), 350000);
 
                         this.screenshotInterval = setInterval(async function() {
                             await this.captureScreenshot();
-                        }.bind(this), 65000)
+                        }.bind(this), 350000)
                     } else {
                         let timeConsumed = this.stopTimer();
                         this.form.timeConsumed = timeConsumed;
