@@ -163,8 +163,8 @@ export default {
         }
         new AuthenticationV1().validate();
 
-        await this.fetchWeeklyTimelogs();
-        await this.fetchDailyTimelogs();
+        this.fetchWeeklyTimelogs();
+        this.fetchDailyTimelogs();
     }
 }
 </script>
