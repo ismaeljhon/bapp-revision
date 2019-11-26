@@ -9,9 +9,10 @@ import Log from '@/shared/Log'
 
 let Screenshot = {
     methods: {
-        async captureScreenshot() {
+        async captureScreenshot(isManual = false) {
+            let manualFilename = isManual ? "-manual" : "";
             let currentUser =  this.getCurrentUser();
-            let screenshotFile = _camelCase(currentUser.name) +"-" + moment().format('DDMMYYYY-hhmmss') + ".jpg";
+            let screenshotFile = _camelCase(currentUser.name) +"-" + moment().format('DDMMYYYY-hhmmss') + manualFilename +".jpg";
             let screenshotFilePath = rootPath + "/screenshots/"+ screenshotFile;
 
             const data = await takeScreenshot("image/jpg");
