@@ -54,8 +54,6 @@ export default {
                 task_id: '',
                 timeConsumed: ''
             },
-            weeklyTimelogs: '',
-            dailyTimeLogs: '',
             tasks: [],
             api: {
                 project: new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/')
@@ -92,6 +90,8 @@ export default {
                         this.form.timeConsumed = timeConsumed;
 
                         await this.pushTimelog(this.form);
+                        await this.fetchWeeklyTimelogs();
+                        await this.fetchDailyTimelogs();
 
                         clearInterval(this.recordTimelogtoLocaInterval);
                         clearInterval(this.screenshotInterval);
@@ -114,15 +114,6 @@ export default {
                 this.tasks = tasks;
             })
         },
-
-        setWeeklyTimelogs() {
-            let weeklyTimelogs = this.getWeeklyTimelogs();
-            this.weeklyTimelogs = weeklyTimelogs.grandtotal ? this.customHourFormat(weeklyTimelogs.grandtotal) : '0h 0m'
-        },
-        setDailyTimelogs() {
-            let dailyTimeLogs = this.getDailyTimelogs();
-            this.dailyTimeLogs =  dailyTimeLogs.grandtotal ? this.customHourFormat(dailyTimeLogs.grandtotal) : '0h 0m';
-        }
     },
     watch: {
         "form.project": function(project) {
@@ -153,6 +144,14 @@ export default {
 
             return projects;
         },
+        weeklyTimelogs() {
+            let weeklyTimelogs = this.$store.getters.WEEKLY_TIMELOGS || [];
+            return weeklyTimelogs.grandtotal ? this.customHourFormat(weeklyTimelogs.grandtotal) : '0h 0m';
+        },
+        dailyTimeLogs() {
+            let dailyTimeLogs = this.$store.getters.DAILY_TIMELOGS || [];
+            return dailyTimeLogs.grandtotal ? this.customHourFormat(dailyTimeLogs.grandtotal) : '0h 0m';
+        }
     },
     async mounted() {
         clearInterval(this.recordTimelogtoLocaInterval);
@@ -166,8 +165,6 @@ export default {
 
         await this.fetchWeeklyTimelogs();
         await this.fetchDailyTimelogs();
-        this.setWeeklyTimelogs();
-        this.setDailyTimelogs();
     }
 }
 </script>

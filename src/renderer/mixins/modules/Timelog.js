@@ -85,6 +85,7 @@ let Timelog = {
                 .then(response => {
                     let timelogs = response.data.timelogs || {};
                     localStorage.setItem('ZOHO_WEEKLY_TIMELOGS', JSON.stringify(timelogs));
+                    this.$store.commit('SET_WEEKLY_TIMELOGS', timelogs)
                 });
         },
         getWeeklyTimelogs() {
@@ -102,7 +103,9 @@ let Timelog = {
             return new RestApiService('/portal/' + process.env.PORTAL_ID + '/logs')
             .index(params)
                 .then(response => {
-                    localStorage.setItem('ZOHO_DAILY_TIMELOGS', JSON.stringify(response.data.timelogs || {}));
+                    let timelogs = response.data.timelogs || {};
+                    localStorage.setItem('ZOHO_DAILY_TIMELOGS', JSON.stringify(timelogs));
+                    this.$store.commit('SET_DAILY_TIMELOGS', timelogs)
                 });
         },
         getDailyTimelogs() {
