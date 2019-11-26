@@ -18,6 +18,9 @@ let Project = {
                     swal(error)
                 });
             }
+
+            this.$store.commit("SET_PROJECTS", this.getProjects());
+
             return true;
         },
         getProjects() {
