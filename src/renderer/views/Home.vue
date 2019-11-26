@@ -141,7 +141,7 @@ export default {
         },
         projects() {
             let projects = [];
-            let fetchedProject = this.getProjects();
+            let fetchedProject = this.$store.getters.PROJECTS || [];
 
             fetchedProject.forEach(project => {
                 projects.push({

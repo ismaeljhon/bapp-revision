@@ -13,6 +13,7 @@ let Project = {
             if (!localStorage.ZOHO_PROJECTS || fetchFromApi) {
                 return this.project_api.index().then(response => {
                     localStorage.ZOHO_PROJECTS = JSON.stringify(response.data.projects);
+                    this.$store.commit("SET_PROJECTS", response.data.projects)
                 }).catch(error => {
                     swal(error)
                 });
