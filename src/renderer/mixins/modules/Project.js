@@ -1,6 +1,7 @@
 import RestApiService from '@/services/RestApiService.js';
 import _filter from 'lodash/filter';
 import swal from 'sweetalert';
+import Log from '@/shared/Log'
 
 let Project = {
     data() {
@@ -14,6 +15,7 @@ let Project = {
                 return this.project_api.index().then(response => {
                     localStorage.ZOHO_PROJECTS = JSON.stringify(response.data.projects);
                     this.$store.commit("SET_PROJECTS", response.data.projects)
+                    Log.success("Projects have been successfully fetched", true)
                 }).catch(error => {
                     swal(error)
                 });

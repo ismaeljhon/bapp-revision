@@ -1,5 +1,15 @@
 import swal from 'sweetalert';
 const Log = {
+    success(msg, withPrompt = false, data = {}) {
+        if (withPrompt) {
+            swal({
+                icon: data && data.title ? data.icon : "success",
+                title: data && data.title ? data.title : "Success",
+                text: msg,
+            })
+        }
+        console.log(msg);
+    },
     info(msg, withPrompt = false, data = {}) {
         if (withPrompt) {
             swal({
