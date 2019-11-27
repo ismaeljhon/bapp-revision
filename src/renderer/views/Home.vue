@@ -24,11 +24,7 @@
             <latest-screenshot ref="latestScreenshot" />
         </b-col>
         <b-col cols="6" class="mt-4">
-            <b-card header="Work Summary">
-                <strong>Today: </strong><span>{{ dailyTimeLogs }}</span>
-                <br>
-                <strong>This Week: </strong><span>{{ weeklyTimelogs }}</span>
-            </b-card>
+            <timelog-summary />
         </b-col>
     </b-row>
 </template>
@@ -37,13 +33,15 @@ import RestApiService from '../services/RestApiService.js';
 import AuthenticationV1 from '@/helpers/AuthenticationV1'
 
 import LatestScreenshot from './partials/LatestScreenshot.vue'
+import TimelogSummary from './partials/TimelogSummary.vue';
 import _filter from 'lodash/filter';
 import _assign from 'lodash/assign';
 
 export default {
     name: 'home',
     components: {
-        'latest-screenshot': LatestScreenshot
+        'latest-screenshot': LatestScreenshot,
+        'timelog-summary': TimelogSummary
     },
     data() {
         return {
@@ -144,14 +142,6 @@ export default {
 
             return projects;
         },
-        weeklyTimelogs() {
-            let weeklyTimelogs = this.$store.getters.WEEKLY_TIMELOGS || [];
-            return weeklyTimelogs.grandtotal ? this.customHourFormat(weeklyTimelogs.grandtotal) : '0h 0m';
-        },
-        dailyTimeLogs() {
-            let dailyTimeLogs = this.$store.getters.DAILY_TIMELOGS || [];
-            return dailyTimeLogs.grandtotal ? this.customHourFormat(dailyTimeLogs.grandtotal) : '0h 0m';
-        }
     },
     async mounted() {
         clearInterval(this.recordTimelogtoLocaInterval);
