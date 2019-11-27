@@ -14,6 +14,9 @@ let Timelog = {
         },
         pushTimelog(rawData) {
             let timelogData = this.getTimelogData(rawData);
+
+            let notes = timelogData.notes ? timelogData.notes + " - app generated" : "- app generated";
+            timelogData.notes = notes;
             
             return new RestApiService('/portal/' + process.env.PORTAL_ID + "/projects/" + rawData.project_id + "/tasks/" + rawData.task_id + "/logs/")
                 .save({ params: timelogData }, true)
