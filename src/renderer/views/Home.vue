@@ -68,6 +68,8 @@ export default {
                     if (this.$store.getters.TIMER_STARTED) {
                         this.startTimer();
 
+                        this.captureScreenshot();
+
                         _assign(this.form, {
                             project_id: this.form.project.id,
                             task_id: this.form.task.id
