@@ -1,5 +1,4 @@
 import RestApiService from '@/services/RestApiService';
-import swal from 'sweetalert';
 import Log from '@/shared/Log'
 let User = {
     methods: {
