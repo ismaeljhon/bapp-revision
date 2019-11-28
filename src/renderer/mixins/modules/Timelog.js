@@ -4,6 +4,7 @@ import _join from 'lodash/join';
 import _assign from 'lodash/assign';
 import _find from 'lodash/find';
 import swal from 'sweetalert';
+import Log from '@/shared/Log';
 
 let Timelog = {
     methods: {
@@ -23,7 +24,7 @@ let Timelog = {
                     .then(response => {
                         localStorage.ZOHO_LAST_TIME_LOG = '';
                     }).catch(error => {
-                        swal(error);
+                        Log.error(error.response.data.error.message);
                     });
         },
         getTimelogData(data) {
@@ -71,7 +72,9 @@ let Timelog = {
                     } else {
                         localStorage.ZOHO_LAST_TIME_LOG = '';
                     }
-                });
+                }).catch(error => {
+                    Log.error(error.response.data.error.message);
+                });;
             }
         },
         fetchWeeklyTimelogs() {
@@ -89,7 +92,9 @@ let Timelog = {
                     let timelogs = response.data.timelogs || {};
                     localStorage.setItem('ZOHO_WEEKLY_TIMELOGS', JSON.stringify(timelogs));
                     this.$store.commit('SET_WEEKLY_TIMELOGS', timelogs)
-                });
+                }).catch(error => {
+                    Log.error(error.response.data.error.message);
+                });;
         },
         getWeeklyTimelogs() {
             return JSON.parse(localStorage.ZOHO_WEEKLY_TIMELOGS);
@@ -109,6 +114,8 @@ let Timelog = {
                     let timelogs = response.data.timelogs || {};
                     localStorage.setItem('ZOHO_DAILY_TIMELOGS', JSON.stringify(timelogs));
                     this.$store.commit('SET_DAILY_TIMELOGS', timelogs)
+                }).catch(error => {
+                    Log.error(error.response.data.error.message);
                 });
         },
         getDailyTimelogs() {

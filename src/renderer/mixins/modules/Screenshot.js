@@ -81,10 +81,14 @@ let Screenshot = {
 
 				// pushing the file to ZOHO People Files
 				await axiosInstance.post('https://people.zoho.com/people/api/files/uploadFileMultipart', formData, { 
-                    headers: { 'Content-Type': 'multipart/form-data'} });
-
-				Log.info("Screenshot ["+filename+"] successfully pushed");
-
+                    headers: { 'Content-Type': 'multipart/form-data'} })
+                    .then(response => {
+                        Log.info("Screenshot ["+filename+"] successfully pushed");
+                    })
+                    .catch(error => {
+                        // Log(error)
+                        Log.error(error.response.data.response.errors.message);
+                    });
 			});
         },
     }
