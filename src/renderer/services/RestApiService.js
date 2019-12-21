@@ -2,12 +2,15 @@ import axios from 'axios'
 import EnvStorageService from './EnvStorageService.js';
 
 let RestApiService = class RestApiService{
-    constructor(prefix) {
+    constructor(prefix, noProjectPrefix = false) {
         const storageService = EnvStorageService.getService();
 
         // axios.defaults.headers.common['Authorization'] = 'Bearer ' + storageService.getAccessToken();
-
-        this.prefix = process.env.PROJECTS_API + prefix
+        if (noProjectPrefix) {
+            this.prefix = prefix;
+        } else {
+            this.prefix = process.env.PROJECTS_API + prefix
+        }
 
         axios.interceptors.request.use(
             config => {

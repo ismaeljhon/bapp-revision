@@ -7,6 +7,9 @@
             <b-form-group label="Task" :invalid-feedback="veeErrors.first('task')" :state="!veeErrors.has('task')">
                 <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="tasks" v-model="form.task" placeholder="Pick a Task" name="task" v-validate="{ required: true }"></v-select>
             </b-form-group>
+            <b-form-group v-if="hasSubTasks" label="Sub Task">
+                <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="subTasks" v-model="form.subTask" placeholder="Pick a Sub Task"></v-select>
+            </b-form-group>
             <b-form-group label="Notes">
                 <b-form-textarea :disabled="$store.getters.TIMER_STARTED" v-model="form.notes" rows="3" max-rows="6"></b-form-textarea>
             </b-form-group>
@@ -36,6 +39,7 @@ import LatestScreenshot from './partials/LatestScreenshot.vue'
 import TimelogSummary from './partials/TimelogSummary.vue';
 import _filter from 'lodash/filter';
 import _assign from 'lodash/assign';
+import _forEach from 'lodash/forEach';
 
 export default {
     name: 'home',
@@ -53,6 +57,7 @@ export default {
                 timeConsumed: ''
             },
             tasks: [],
+            subTasks: [],
             api: {
                 project: new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/')
             },
@@ -108,17 +113,36 @@ export default {
                         tasks.push({
                             id: task.id_string,
                             name: task.name,
+                            subTasksUrl: task.subtasks ? task.link.subtask.url : ''
                         })
                     }
                 })
                 this.tasks = tasks;
             })
         },
+
+        getSubTasksByUrl(url){
+            new RestApiService(url, true).index().then(response => {
+                let subTasks = [];
+                _forEach(response.data.tasks, task => {
+                    subTasks.push({
+                        id: task.id_string,
+                        name: task.name
+                    })
+                });
+                this.subTasks = subTasks;
+            }).catch(error => {
+                Log.error(error.response.data.error.message);
+            });
+        }
     },
     watch: {
         "form.project": function(project) {
             this.getProjectTasks(project.id);
-        }
+        },
+        "form.task": function(task) {
+            this.getSubTasksByUrl(task.subTasksUrl);
+        },
     },
     computed: {
         timerButtonVariant() {
@@ -143,6 +167,9 @@ export default {
             })
 
             return projects;
+        },
+        hasSubTasks() {
+            return this.form.task && this.form.task.subTasksUrl;
         },
     },
     async mounted() {

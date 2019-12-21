@@ -18,8 +18,10 @@ let Timelog = {
 
             let notes = timelogData.notes ? timelogData.notes + " - app generated" : "- app generated";
             timelogData.notes = notes;
+
+            let taskId = rawData.subTask ? rawData.subTask.id : rawData.task_id;
             
-            return new RestApiService('/portal/' + process.env.PORTAL_ID + "/projects/" + rawData.project_id + "/tasks/" + rawData.task_id + "/logs/")
+            return new RestApiService('/portal/' + process.env.PORTAL_ID + "/projects/" + rawData.project_id + "/tasks/" + taskId + "/logs/")
                 .save({ params: timelogData }, true)
                     .then(response => {
                         localStorage.ZOHO_LAST_TIME_LOG = '';
