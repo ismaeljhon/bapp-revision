@@ -40,6 +40,7 @@ import TimelogSummary from './partials/TimelogSummary.vue';
 import _filter from 'lodash/filter';
 import _assign from 'lodash/assign';
 import _forEach from 'lodash/forEach';
+import _find from 'lodash/find';
 
 export default {
     name: 'home',
@@ -106,8 +107,11 @@ export default {
         },
 
         getProjectTasks(projectId) {
-            new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/' + projectId + "/tasks/").index().then(response => {
+            let currentUser = this.getCurrentUser();
+
+            new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/' + projectId + "/tasks/").index({ owner: currentUser.id }).then(response => {
                 let tasks = [];
+
                 response.data.tasks.forEach(task => {
                     if (!task.completed) {
                         tasks.push({
@@ -122,13 +126,17 @@ export default {
         },
 
         getSubTasksByUrl(url){
-            new RestApiService(url, true).index().then(response => {
+            let currentUser = this.getCurrentUser();
+
+            new RestApiService(url, true).index({ owner: currentUser.id }).then(response => {
                 let subTasks = [];
                 _forEach(response.data.tasks, task => {
-                    subTasks.push({
-                        id: task.id_string,
-                        name: task.name
-                    })
+                    if (!task.completed && task.details && task.details.owners && _find(task.details.owners, o => { return o.id == currentUser.id })) {
+                        subTasks.push({
+                            id: task.id_string,
+                            name: task.name
+                        })
+                    } 
                 });
                 this.subTasks = subTasks;
             }).catch(error => {
