@@ -16,7 +16,8 @@ let Timelog = {
         pushTimelog(rawData) {
             let timelogData = this.getTimelogData(rawData);
 
-            let notes = timelogData.notes ? timelogData.notes + " - app generated" : "- app generated";
+            let suffix = " - app generated";
+            let notes = timelogData.notes ? timelogData.notes + suffix : suffix;
             timelogData.notes = notes;
 
             let taskId = rawData.subTask ? rawData.subTask.id : rawData.task_id;
