@@ -15,7 +15,7 @@
             </b-form-group>
         </b-col>
         <b-col cols="12">
-            <b-button :variant="timerButtonVariant" size="lg" @click.prevent="setupTimer" style="text-transform: uppercase">
+            <b-button ref="timerButton" :variant="timerButtonVariant" size="lg" @click.prevent="setupTimer" style="text-transform: uppercase">
                 <font-awesome-icon :icon="timerButtonIcon" class="mr-2" />{{ timerButtonText }}
             </b-button>
             <span class="ml-2" v-show="$store.getters.TIMER_STARTED">{{ time }}</span>
@@ -38,9 +38,9 @@ import AuthenticationV1 from '@/helpers/AuthenticationV1'
 import LatestScreenshot from './partials/LatestScreenshot.vue'
 import TimelogSummary from './partials/TimelogSummary.vue';
 import _filter from 'lodash/filter';
-import _assign from 'lodash/assign';
 import _forEach from 'lodash/forEach';
 import _find from 'lodash/find';
+import _assign from 'lodash/assign'
 
 export default {
     name: 'home',
@@ -105,14 +105,13 @@ export default {
                 }
             });
         },
-
         getProjectTasks(projectId) {
             let currentUser = this.getCurrentUser();
 
             new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/' + projectId + "/tasks/").index({ owner: currentUser.id }).then(response => {
                 let tasks = [];
 
-                response.data.tasks.forEach(task => {
+                _forEach(response.data.tasks, task => {
                     if (!task.completed) {
                         tasks.push({
                             id: task.id_string,
@@ -142,14 +141,31 @@ export default {
             }).catch(error => {
                 Log.error(error.response.data.error.message);
             });
+        },
+
+        setKeyboardShortcuts() {
+            document.addEventListener('keyup', (e) => {
+                if (e.ctrlKey) {
+                    /** ctrl+p - manual screeshot */
+                    if (e.keyCode == 80) {
+                        this.captureScreenshot(true)
+                    }
+                    /** ctrl+s - stop timer */
+                    if (e.keyCode == 83) {
+                        this.setupTimer();
+                    }
+                }
+            });
         }
     },
     watch: {
         "form.project": function(project) {
-            this.getProjectTasks(project.id);
+            if (project)
+                this.getProjectTasks(project.id);
         },
         "form.task": function(task) {
-            this.getSubTasksByUrl(task.subTasksUrl);
+            if (task)
+                this.getSubTasksByUrl(task.subTasksUrl);
         },
     },
     computed: {
@@ -181,9 +197,6 @@ export default {
         },
     },
     async mounted() {
-        clearInterval(this.recordTimelogtoLocaInterval);
-        clearInterval(this.screenshotInterval);
-
         if (!process.env.ZOHO_ACCESS_TOKEN_V1) {
             Log.error("No Authentication V1 key set, please reach out for some help")
             return false;
@@ -192,6 +205,8 @@ export default {
 
         this.fetchWeeklyTimelogs();
         this.fetchDailyTimelogs();
+
+        this.setKeyboardShortcuts();
     }
 }
 </script>
