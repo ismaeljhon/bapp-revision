@@ -26,6 +26,7 @@ let Timelog = {
                 .save({ params: timelogData }, true)
                     .then(response => {
                         localStorage.ZOHO_LAST_TIME_LOG = '';
+                        Log.success("Timelog has been successfully pushed")
                     }).catch(error => {
                         Log.error(error.response.data.error.message);
                     });
@@ -69,15 +70,13 @@ let Timelog = {
                             value: true
                         }
                     },
-                }).then((pushTimelog) => {
+                }).then(pushTimelog => {
                     if (pushTimelog) {
                         this.pushTimelog(pendingTimelogs);
                     } else {
                         localStorage.ZOHO_LAST_TIME_LOG = '';
                     }
-                }).catch(error => {
-                    Log.error(error.response.data.error.message);
-                });;
+                })
             }
         },
         fetchWeeklyTimelogs() {
