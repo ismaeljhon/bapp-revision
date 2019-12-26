@@ -1,12 +1,15 @@
 import swal from 'sweetalert';
+import _assign from 'lodash/assign';
+
 const Log = {
     success(msg, withPrompt = false, data = {}) {
         if (withPrompt) {
-            swal({
-                icon: data && data.title ? data.icon : "success",
-                title: data && data.title ? data.title : "Success",
-                text: msg,
+            _assign(data, {
+                icon: data && data.icon ? data.icon : "success",
+                title: data && data.title ? data.title : "Success", 
+                text: msg
             })
+            swal(data);
         }
         console.log(msg);
     },

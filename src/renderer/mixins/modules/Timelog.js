@@ -11,6 +11,7 @@ let Timelog = {
         recordTimelog(rawData) {
             _assign(rawData, this.getTimelogData(rawData));
             localStorage.setItem('ZOHO_LAST_TIME_LOG', JSON.stringify(rawData));
+            console.log("record time log")
             return true;
         },
         pushTimelog(rawData) {
@@ -26,7 +27,7 @@ let Timelog = {
                 .save({ params: timelogData }, true)
                     .then(response => {
                         localStorage.ZOHO_LAST_TIME_LOG = '';
-                        Log.success("Timelog has been successfully pushed")
+                        Log.success("Timelog has been successfully pushed", true, { timer: 1500 })
                     }).catch(error => {
                         Log.error(error.response.data.error.message);
                     });

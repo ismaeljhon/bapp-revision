@@ -14,7 +14,7 @@ let Project = {
                 return this.project_api.index().then(response => {
                     localStorage.ZOHO_PROJECTS = JSON.stringify(response.data.projects);
                     this.$store.commit("SET_PROJECTS", response.data.projects)
-                    Log.success("Projects have been successfully fetched", true)
+                    Log.success("Projects have been successfully fetched", true, { timer: 1500 })
                 }).catch(error => {
                     Log.error(error.response.data.message)
                 });
