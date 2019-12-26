@@ -86,7 +86,7 @@ export default {
                             let timeConsumed = this.getCurrentTimer();
                             this.form.timeConsumed = timeConsumed;
                             this.recordTimelog(this.form);
-                        }.bind(this), 350000);
+                        }.bind(this), 60000);
 
                         this.screenshotInterval = setInterval(async function() {
                             await this.captureScreenshot();
@@ -205,7 +205,9 @@ export default {
 
         this.fetchWeeklyTimelogs();
         this.fetchDailyTimelogs();
-
+        
+        clearInterval(this.recordTimelogtoLocaInterval);
+        clearInterval(this.screenshotInterval);
         this.setKeyboardShortcuts();
     }
 }
