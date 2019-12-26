@@ -52,25 +52,6 @@
       "icon": "build/icons/icon.icns",
       "target": "pkg"
     },
-    "win": {
-      "publish": {
-        "provider": "generic",
-        "url": "https://aws.com/release/windows",
-        "publishAutoUpdate": true,
-        "channel": "latest"
-      },
-      "target": {
-        "target": "nsis",
-        "arch": [
-          "x64",
-          "ia32"
-        ]
-      },
-      "icon": "icons/icon.ico",
-      "artifactName": "Application.${ext}",
-      "certificateSubjectName": "subject name",
-      "certificatePassword":  "password"
-    },
     "nsis": {
       "allowToChangeInstallationDirectory": true,
       "oneClick": false,
