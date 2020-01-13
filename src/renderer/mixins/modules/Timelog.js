@@ -80,11 +80,11 @@ let Timelog = {
                 })
             }
         },
-        fetchWeeklyTimelogs() {
+        fetchWeeklyTimelogs(overrideOptions = {}) {
             let params = {
                 users_list: this.getCurrentUser().id,
-                view_type: 'week',
-                date: moment().format('MM-DD-YYYY'),
+                view_type: overrideOptions.view_type ? overrideOptions.view_type : 'week',
+                date: overrideOptions.date ? overrideOptions.date : moment().format('MM-DD-YYYY'),
                 bill_status: 'All',
                 component_type: 'task'
             };
@@ -93,6 +93,11 @@ let Timelog = {
             .index(params)
                 .then(response => {
                     let timelogs = response.data.timelogs || {};
+
+                    if (!overrideOptions.saveToLocalStorage) {
+                        return timelogs;
+                    }
+
                     localStorage.setItem('ZOHO_WEEKLY_TIMELOGS', JSON.stringify(timelogs));
                     this.$store.commit('SET_WEEKLY_TIMELOGS', timelogs)
                 }).catch(error => {

@@ -8,7 +8,7 @@
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
     "build:win64": "node .electron-vue/build.js && electron-builder --win --x64",
-	  "build:win32": "node .electron-vue/build.js && electron-builder --win --ia32",
+    "build:win32": "node .electron-vue/build.js && electron-builder --win --ia32",
     "build:all": "electron-builder -mw",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
@@ -83,6 +83,7 @@
     "vue-excel-export": "^0.1.3",
     "vue-router": "^3.0.1",
     "vue-select": "^3.2.0",
+    "vuejs-datepicker": "^1.6.2",
     "vuex": "^3.0.1",
     "vuex-electron": "^1.0.0"
   },

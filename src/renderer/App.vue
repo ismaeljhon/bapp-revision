@@ -10,7 +10,9 @@
             <b-navbar-nav class="ml-auto">
                 <b-nav-item-dropdown right>
                     <template slot="text"><font-awesome-icon icon="cog" /></template>
-                    <b-dropdown-item><font-awesome-icon icon="calendar-alt"></font-awesome-icon> Timesheet</b-dropdown-item>
+                    <b-dropdown-item @click.prevent="$refs.timesheetModal.show()">
+                        <font-awesome-icon icon="calendar-alt"></font-awesome-icon> Timesheet
+                    </b-dropdown-item>
                     <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item @click.prevent="logout" :disabled="$store.getters.TIMER_STARTED"><font-awesome-icon icon="sign-out-alt"></font-awesome-icon> Logout</b-dropdown-item>
                 </b-nav-item-dropdown>
@@ -19,12 +21,19 @@
         <b-container>
             <router-view></router-view>
         </b-container>
+
+        <timesheet-modal ref="timesheetModal" />
     </div>
 </template>
 
 <script>
-  export default {
+import TimesheetModal from './views/modals/Timesheet';
+
+export default {
     name: 'bickert-tracker-app',
+    components: {
+        TimesheetModal
+    },
     mounted: async function() {
         this.fetchProjects();
         this.fetchUsers();
