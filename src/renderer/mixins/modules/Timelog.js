@@ -94,7 +94,7 @@ let Timelog = {
                 .then(response => {
                     let timelogs = response.data.timelogs || {};
 
-                    if (!overrideOptions.saveToLocalStorage) {
+                    if (overrideOptions.doNotSaveToLocalStorage) {
                         return timelogs;
                     }
 

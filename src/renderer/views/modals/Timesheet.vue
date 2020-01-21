@@ -53,7 +53,7 @@ export default {
         async processTimesheet() {
             _assign(this.form, {
                 date: moment(this.form.date).format('MM-DD-YYYY'),
-                saveToLocalStorage: false
+                doNotSaveToLocalStorage: false
             })
 
             this.timesheet = await this.fetchWeeklyTimelogs(this.form)
