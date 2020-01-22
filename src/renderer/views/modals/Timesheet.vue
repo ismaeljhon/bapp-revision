@@ -57,6 +57,7 @@ export default {
                     date: moment().format('MM-DD-YYYY'),
                     view_type: 'week',
                 },
+                isTimesheetReady: false
             });
         },
         async processTimesheet() {
