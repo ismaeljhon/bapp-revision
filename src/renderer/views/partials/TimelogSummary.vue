@@ -21,8 +21,5 @@ export default {
             return dailyTimeLogs.grandtotal ? this.customHourFormat(dailyTimeLogs.grandtotal) : '0h 0m';
         }
     },
-    mounted() {
-        console.log(moment.tz.guess())
-    }
 }
 </script>
