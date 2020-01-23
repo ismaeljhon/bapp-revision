@@ -2,10 +2,10 @@
     <b-row>
         <b-col cols="12" class="mt-3">
             <b-form-group label="Project" :invalid-feedback="veeErrors.first('project')" :state="!veeErrors.has('project')">
-                <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="projects" v-model="form.project" placeholder="Select a Project" name="project" v-validate="{ required: true }"></v-select>
+                <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="projects" v-model="form.project" placeholder="Select a Project" name="project" v-validate="{ required: true }" @input="getProjectTasks"></v-select>
             </b-form-group>
             <b-form-group label="Task" :invalid-feedback="veeErrors.first('task')" :state="!veeErrors.has('task')">
-                <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="tasks" v-model="form.task" placeholder="Pick a Task" name="task" v-validate="{ required: true }"></v-select>
+                <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="tasks" v-model="form.task" placeholder="Pick a Task" name="task" v-validate="{ required: true }" @input="getSubTasks"></v-select>
             </b-form-group>
             <b-form-group v-if="hasSubTasks" label="Sub Task">
                 <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="subTasks" v-model="form.subTask" placeholder="Pick a Sub Task"></v-select>
@@ -55,7 +55,8 @@ export default {
                 project_id: '',
                 task: '',
                 task_id: '',
-                timeConsumed: ''
+                timeConsumed: '',
+                subTask: ''
             },
             tasks: [],
             subTasks: [],
@@ -105,42 +106,53 @@ export default {
                 }
             });
         },
-        getProjectTasks(projectId) {
-            let currentUser = this.getCurrentUser();
-
-            new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/' + projectId + "/tasks/").index({ owner: currentUser.id }).then(response => {
-                let tasks = [];
-
-                _forEach(response.data.tasks, task => {
-                    if (!task.completed) {
-                        tasks.push({
-                            id: task.id_string,
-                            name: task.name,
-                            subTasksUrl: task.subtasks ? task.link.subtask.url : ''
-                        })
-                    }
-                })
-                this.tasks = tasks;
+        getProjectTasks(project) {
+            _assign(this.form, {
+                task: '',
+                subTask: '',
             })
+
+            if (project) {
+                let currentUser = this.getCurrentUser();
+                new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/' + project.id + "/tasks/").index({ owner: currentUser.id }).then(response => {
+                    let tasks = [];
+
+                    _forEach(response.data.tasks, task => {
+                        if (!task.completed) {
+                            tasks.push({
+                                id: task.id_string,
+                                name: task.name,
+                                subTasksUrl: task.subtasks ? task.link.subtask.url : ''
+                            })
+                        }
+                    })
+                    this.tasks = tasks;
+                })
+            }
         },
 
-        getSubTasksByUrl(url){
-            let currentUser = this.getCurrentUser();
-
-            new RestApiService(url, true).index({ owner: currentUser.id }).then(response => {
-                let subTasks = [];
-                _forEach(response.data.tasks, task => {
-                    if (!task.completed && task.details && task.details.owners && _find(task.details.owners, o => { return o.id == currentUser.id })) {
-                        subTasks.push({
-                            id: task.id_string,
-                            name: task.name
-                        })
-                    } 
-                });
-                this.subTasks = subTasks;
-            }).catch(error => {
-                Log.error(error.response.data.error.message);
+        getSubTasks(task){
+            _assign(this.form, {
+                subTask: '',
             });
+            
+            if (task) {
+                let currentUser = this.getCurrentUser();
+                new RestApiService(task.subTasksUrl, true).index({ owner: currentUser.id }).then(response => {
+                    let subTasks = [];
+                    _forEach(response.data.tasks, task => {
+                        if (!task.completed && task.details && task.details.owners && _find(task.details.owners, o => { return o.id == currentUser.id })) {
+                            subTasks.push({
+                                id: task.id_string,
+                                name: task.name
+                            })
+                        } 
+                    });
+                    this.subTasks = subTasks;
+                }).catch(error => {
+                    Log.error(error.response.data.error.message);
+                });
+            }
         },
 
         setKeyboardShortcuts() {
@@ -157,16 +169,6 @@ export default {
                 }
             });
         }
-    },
-    watch: {
-        "form.project": function(project) {
-            if (project)
-                this.getProjectTasks(project.id);
-        },
-        "form.task": function(task) {
-            if (task)
-                this.getSubTasksByUrl(task.subTasksUrl);
-        },
     },
     computed: {
         timerButtonVariant() {
