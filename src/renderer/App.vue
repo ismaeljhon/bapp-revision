@@ -42,7 +42,7 @@ export default {
         await this.checkPendingTimelogs();
         
         if (process.platform == 'win32') {
-            await exec(`mkdir ${process.env.ZOHO_SCREENSHOT_FOLDER}`)
+            await exec(`md ${process.env.ZOHO_SCREENSHOT_FOLDER}`)
         } else {
             swal({
                 title: 'Important Notes',

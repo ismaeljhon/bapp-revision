@@ -14,8 +14,8 @@ let Screenshot = {
             let currentUser =  this.getCurrentUser();
             let screenshotFile = _camelCase(currentUser.name) +"-" + moment().format('DDMMYYYY-hhmmss') + manualFilename +".jpg";
 
-            let prefix = process.platform == 'win32' ? process.env.ZOHO_SCREENSHOT_FOLDER : rootPath;
-            let screenshotFilePath = prefix + "/screenshots/"+ screenshotFile;
+            let prefix = process.platform == 'win32' ? process.env.ZOHO_SCREENSHOT_FOLDER : rootPath + "/screenshots/";
+            let screenshotFilePath = prefix + screenshotFile;
 
             const data = await takeScreenshot("image/jpg");
             fs.writeFile(screenshotFilePath, data.buffer, (error) => {
