@@ -29,6 +29,7 @@
 <script>
 import TimesheetModal from './views/modals/Timesheet';
 const {app} = require('electron')
+import exec from 'await-exec';
 
 export default {
     name: 'bickert-tracker-app',
@@ -39,7 +40,16 @@ export default {
         this.fetchProjects();
         this.fetchUsers();
         await this.checkPendingTimelogs();
-        console.log(process.platform);
+        
+        if (process.platform == 'win32') {
+            await exec(`mkdir ${process.env.ZOHO_SCREENSHOT_FOLDER}`)
+        } else {
+            swal({
+                title: 'Important Notes',
+                icon: 'warning',
+                text: 'Cannot create public folder in your machine (' + process.platform + ")\nWe will be using the program folder in behalf.. \n Please make sure you run this application as administrator."
+            })
+        }
     },
     methods: {
         logout() {
