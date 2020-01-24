@@ -28,6 +28,7 @@
 
 <script>
 import TimesheetModal from './views/modals/Timesheet';
+const {app} = require('electron')
 
 export default {
     name: 'bickert-tracker-app',
@@ -38,6 +39,7 @@ export default {
         this.fetchProjects();
         this.fetchUsers();
         await this.checkPendingTimelogs();
+        console.log(process.platform);
     },
     methods: {
         logout() {

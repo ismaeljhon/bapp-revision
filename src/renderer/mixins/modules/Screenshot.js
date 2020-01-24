@@ -13,6 +13,7 @@ let Screenshot = {
             let manualFilename = isManual ? "-manual" : "";
             let currentUser =  this.getCurrentUser();
             let screenshotFile = _camelCase(currentUser.name) +"-" + moment().format('DDMMYYYY-hhmmss') + manualFilename +".jpg";
+
             let screenshotFilePath = rootPath + "/screenshots/"+ screenshotFile;
 
             const data = await takeScreenshot("image/jpg");
