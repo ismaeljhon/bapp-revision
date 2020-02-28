@@ -39,6 +39,7 @@ export default {
                 if (noerrors) {
                     let validateV1 = false;
 
+                    Log.info("Logging in...", { processType: 'request' })
                     await axios({
                         url: 'https://accounts.zoho.com/apiauthtoken/nb/create',
                         method: 'POST',
@@ -55,7 +56,7 @@ export default {
                             let errorMsgCode = response.data.split("CAUSE=")[1].split("\n")[0];
                             let errorMsg = this.messagesMapping[errorMsgCode];
                             errorMsg = errorMsg ? errorMsg : errorMsgCode;
-                            Log.error(errorMsg, true);
+                            Log.error(errorMsg, { withPrompt: true, processType: 'response' });
                             return;
                         }
 
@@ -75,9 +76,10 @@ export default {
 
                     if (currentUser) {
                         localStorage.ZOHO_CURRENT_USER = JSON.stringify(currentUser);
+                        Log.info("Successfully login using email: " + currentUser.email, { processType: 'response' })
                         this.$router.push('/');
                     } else {
-                        Log.warning('Email not Registered on any projects')
+                        Log.warning('Email not Registered on any projects', { processType: 'response' })
                     }
                 }
             });

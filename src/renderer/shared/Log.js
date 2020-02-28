@@ -1,9 +1,10 @@
 import swal from 'sweetalert';
 import _assign from 'lodash/assign';
+import log from 'electron-log';
 
 const Log = {
-    success(msg, withPrompt = false, data = {}) {
-        if (withPrompt) {
+    success(msg, data = {}) {
+        if (data.withPrompt) {
             _assign(data, {
                 icon: data && data.icon ? data.icon : "success",
                 title: data && data.title ? data.title : "Success", 
@@ -11,19 +12,19 @@ const Log = {
             })
             swal(data);
         }
-        console.log(msg);
+        log.info((data.processType ? "[" + data.processType.toUpperCase() + "] " : "") + msg + JSON.stringify(data.rawData));
     },
-    info(msg, withPrompt = false, data = {}) {
-        if (withPrompt) {
+    info(msg, data = {}) {
+        if (data.withPrompt) {
             swal({
                 icon: data && data.title ? data.icon : "info",
                 title: data && data.title ? data.title : "Info",
                 text: msg,
             })
         }
-        console.log(msg);
+        log.info((data.processType ? "[" + data.processType.toUpperCase() + "]" : "") + msg);
     },
-    warning(msg, withPrompt = false, data = {}) {
+    warning(msg, data = {}) {
         if (withPrompt) {
             swal({
                 icon: data && data.title ? data.icon : "warning",
@@ -31,17 +32,17 @@ const Log = {
                 text: msg,
             })
         }
-        console.log(msg);
+        log.warning((data.processType ? "[" + data.processType.toUpperCase() + "]" : "") + msg);
     },
-    error(msg, withPrompt = true) {
-        if (withPrompt) {
+    error(msg, data = {}) {
+        if (data.withPrompt) {
             swal({
                 icon: 'error',
                 title: "Error",
                 text: msg,
             })
         }
-        console.log(msg);
+        log.error((data.processType ? "[" + data.processType.toUpperCase() + "]" : "") + msg);
     }
 }
 

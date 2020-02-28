@@ -1,3 +1,5 @@
+import Log from '@/shared/Log';
+
 let Timer = {
     data() {
         return {
@@ -36,6 +38,8 @@ let Timer = {
 
             this.started = setInterval(this.clockRunning, 10);	
             this.running = true;
+
+            Log.info("Start Timer", { processType: 'process' });
         },
         pauseTimer() {
             this.running = false;
@@ -53,6 +57,8 @@ let Timer = {
             this.timeBegan = null;
             this.timeStopped = null;
             this.time = "00:00:00";
+
+            Log.info("Stop Timer: " + timeConsumed, { processType: 'process' });
 
             return timeConsumed;
         },

@@ -10,14 +10,20 @@ let Project = {
     },
     methods: {
         fetchProjects(fetchFromApi = false) {
+            Log.info("Fetching Projects...");
+
             if (!localStorage.ZOHO_PROJECTS || fetchFromApi) {
+                Log.info("[Request] Fetching Projects from API...");
+
                 return this.project_api.index().then(response => {
                     localStorage.ZOHO_PROJECTS = JSON.stringify(response.data.projects);
                     this.$store.commit("SET_PROJECTS", response.data.projects)
-                    Log.success("Projects have been successfully fetched", true, { timer: 1500 })
+                    Log.success("[Response] Projects have been successfully fetched from API", { withPrompt: true, timer: 1500 })
                 }).catch(error => {
-                    Log.error(error.response.data.message)
+                    Log.error("[Response]" + error.response.data.message)
                 });
+            } else {
+                Log.info("Projects have been successfully fetched from LocalStorage");
             }
 
             this.$store.commit("SET_PROJECTS", this.getProjects());

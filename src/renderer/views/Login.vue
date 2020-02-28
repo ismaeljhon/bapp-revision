@@ -34,7 +34,7 @@
                             localStorage.ZOHO_CURRENT_USER = JSON.stringify(currentUser);
                             this.$router.push('/');
                         } else {
-                            Log.warning('Email not Registered', true)
+                            Log.warning('Email not Registered', { withPrompt: true })
                         }
                     }
 

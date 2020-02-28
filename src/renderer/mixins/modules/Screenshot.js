@@ -10,6 +10,8 @@ import Log from '@/shared/Log'
 let Screenshot = {
     methods: {
         async captureScreenshot(isManual = false) {
+            Log.info("[Process] Capturing screenshot" + (isManual ? ' - manual': ''));
+
             let manualFilename = isManual ? "-manual" : "";
             let currentUser =  this.getCurrentUser();
             let screenshotFile = _camelCase(currentUser.name) +"-" + moment().format('DDMMYYYY-hhmmss') + manualFilename +".jpg";
@@ -20,8 +22,11 @@ let Screenshot = {
             const data = await takeScreenshot("image/jpg");
             fs.writeFile(screenshotFilePath, data.buffer, (error) => {
                 if (error) {
-                    Log.error(error);
+                    Log.error(error, { processType: 'error' });
                 }
+
+                Log.info("Screenshot successfully captured and saved " + screenshotFilePath, { processType: 'process' });
+
                 this.$store.commit('SET_SCREENSHOT', { latest: screenshotFilePath });
                 
                 this.pushScreenshot(screenshotFile)
@@ -48,6 +53,8 @@ let Screenshot = {
                 }
             );
 
+            Log.info("Retrieving Screenshot from a local file", { processType: 'request' })
+
             await axiosInstance.get(localScreenshotFile, {
                 responseType: 'blob',
             }).then(async (response) => {
@@ -73,23 +80,26 @@ let Screenshot = {
 				}
 
 				if (!response.data)
-					return Log.error("Error on fetching the image blob");
+					return Log.error("Error on fetching the image blob", { processType: 'responst' });
 
 				// translating the response data to BLOB object
 				let imageBlob = new Blob([response.data]);
 
 				// NOTE: Third Parameter (filename) is neccessary to be readable in ZOHO People File
-				formData.append('uploadFile', imageBlob, filename);
+                formData.append('uploadFile', imageBlob, filename);
+                
+                Log.info("Screenshot file successfully retrieved " + filename, { processType: 'response' });
+
+                Log.info("Pushing Screenshot to Zoho People " + filename, { processType: 'request' });
 
 				// pushing the file to ZOHO People Files
 				await axiosInstance.post('https://people.zoho.com/people/api/files/uploadFileMultipart', formData, { 
                     headers: { 'Content-Type': 'multipart/form-data'} })
                     .then(response => {
-                        Log.info("Screenshot ["+filename+"] successfully pushed");
+                        Log.info("Screenshot ["+filename+"] successfully pushed", { processType: 'response' });
                     })
                     .catch(error => {
-                        // Log(error)
-                        Log.error(error.response.data.response.errors.message);
+                        Log.error(error.response.data.response.errors.message, { processType: 'response' });
                     });
 			});
         },

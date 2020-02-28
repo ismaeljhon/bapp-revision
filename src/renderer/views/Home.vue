@@ -41,6 +41,7 @@ import _filter from 'lodash/filter';
 import _forEach from 'lodash/forEach';
 import _find from 'lodash/find';
 import _assign from 'lodash/assign'
+import Log from '@/shared/Log'
 
 export default {
     name: 'home',
@@ -114,7 +115,10 @@ export default {
 
             if (project) {
                 let currentUser = this.getCurrentUser();
-                new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/' + project.id + "/tasks/").index({ owner: currentUser.id }).then(response => {
+
+                Log.info("getProjectTasks - Project ID:" + project.id, { processType: 'request' })
+                new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/' + project.id + "/tasks/").index({ owner: currentUser.id })
+                .then(response => {
                     let tasks = [];
 
                     _forEach(response.data.tasks, task => {
@@ -127,6 +131,11 @@ export default {
                         }
                     })
                     this.tasks = tasks;
+
+                    Log.info("Task successfuly fetched - Project ID:" + project.id, { processType: 'response' })
+
+                }).catch(error => {
+                    Log.error(error, { processType: 'response' })
                 })
             }
         },

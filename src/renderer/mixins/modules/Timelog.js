@@ -11,7 +11,7 @@ let Timelog = {
         recordTimelog(rawData) {
             _assign(rawData, this.getTimelogData(rawData));
             localStorage.setItem('ZOHO_LAST_TIME_LOG', JSON.stringify(rawData));
-            console.log("record time log")
+            Log.info("Record Timelog: " + JSON.stringify(rawData), { processType: 'process' });
             return true;
         },
         pushTimelog(rawData) {
@@ -23,11 +23,13 @@ let Timelog = {
 
             let taskId = rawData.subTask ? rawData.subTask.id : rawData.task_id;
             
+            Log.info("Pushing Timelog " + JSON.stringify(rawData), { processType: 'request' });
+
             return new RestApiService('/portal/' + process.env.PORTAL_ID + "/projects/" + rawData.project_id + "/tasks/" + taskId + "/logs/")
                 .save({ params: timelogData }, true)
                     .then(response => {
                         localStorage.ZOHO_LAST_TIME_LOG = '';
-                        Log.success("Timelog has been successfully pushed", true, { timer: 1500 })
+                        Log.success("Timelog has been successfully pushed", { rawData: rawData, timer: 1500, withPrompt: true, processType: 'response' })
                     }).catch(error => {
                         Log.error(error.response.data.error.message);
                     });
@@ -89,6 +91,8 @@ let Timelog = {
                 component_type: 'task'
             };
 
+            Log.info("Fetch weekly Timelog ", { processType: 'request' })
+
             return new RestApiService('/portal/' + process.env.PORTAL_ID + '/logs')
             .index(params)
                 .then(response => {
@@ -100,8 +104,10 @@ let Timelog = {
 
                     localStorage.setItem('ZOHO_WEEKLY_TIMELOGS', JSON.stringify(timelogs));
                     this.$store.commit('SET_WEEKLY_TIMELOGS', timelogs)
+
+                    Log.info("Weekly Timelog successfully fetch " + JSON.stringify(timelogs), { processType: 'response' })
                 }).catch(error => {
-                    Log.error(error.response.data.error.message);
+                    Log.error(error.response.data.error.message, { processType: 'response' });
                 });;
         },
         getWeeklyTimelogs() {
@@ -116,14 +122,18 @@ let Timelog = {
                 component_type: 'task'
             };
 
+            Log.info("Fetch daily Timelog ", { processType: 'request' })
+
             return new RestApiService('/portal/' + process.env.PORTAL_ID + '/logs')
             .index(params)
                 .then(response => {
                     let timelogs = response.data.timelogs || {};
                     localStorage.setItem('ZOHO_DAILY_TIMELOGS', JSON.stringify(timelogs));
                     this.$store.commit('SET_DAILY_TIMELOGS', timelogs)
+
+                    Log.info("Daily Timelog successfully fetch " + JSON.stringify(timelogs), { processType: 'response' })
                 }).catch(error => {
-                    Log.error(error.response.data.error.message);
+                    Log.error(error.response.data.error.message, { processType: 'response' });
                 });
         },
         getDailyTimelogs() {
