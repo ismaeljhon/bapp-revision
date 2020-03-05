@@ -44,11 +44,12 @@ export default {
         if (process.platform == 'win32') {
             await exec(`md ${process.env.ZOHO_SCREENSHOT_FOLDER}`)
         } else {
-            swal({
-                title: 'Important Notes',
-                icon: 'warning',
-                text: 'Cannot create public folder in your machine (' + process.platform + ")\nWe will be using the program folder in behalf.. \n Please make sure you run this application as administrator."
-            })
+            if (!localStorage.ZOHO_LAST_TIME_LOG)
+                swal({
+                    title: 'Important Notes',
+                    icon: 'warning',
+                    text: 'Cannot create public folder in your machine (' + process.platform + ")\nWe will be using the program folder in behalf.. \n Please make sure you run this application as administrator."
+                })
         }
     },
     methods: {
