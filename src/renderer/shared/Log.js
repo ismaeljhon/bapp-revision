@@ -25,14 +25,14 @@ const Log = {
         log.info((data.processType ? "[" + data.processType.toUpperCase() + "]" : "") + msg);
     },
     warning(msg, data = {}) {
-        if (withPrompt) {
+        if (data.withPrompt) {
             swal({
                 icon: data && data.title ? data.icon : "warning",
                 title: data && data.title ? data.title : "Warning",
                 text: msg,
             })
         }
-        log.warning((data.processType ? "[" + data.processType.toUpperCase() + "]" : "") + msg);
+        log.info((data.processType ? "[Warning][" + data.processType.toUpperCase() + "]" : "") + msg);
     },
     error(msg, data = {}) {
         if (data.withPrompt) {
