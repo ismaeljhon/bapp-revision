@@ -15,7 +15,7 @@
             </b-form-group>
         </b-col>
         <b-col cols="12">
-            <b-button ref="timerButton" :variant="timerButtonVariant" size="lg" @click.prevent="setupTimer" style="text-transform: uppercase">
+            <b-button ref="timerButton" :variant="timerButtonVariant" :disabled="isLoading" size="lg" @click.prevent="setupTimer" style="text-transform: uppercase">
                 <font-awesome-icon :icon="timerButtonIcon" class="mr-2" />{{ timerButtonText }}
             </b-button>
             <span class="ml-2" v-show="$store.getters.TIMER_STARTED">{{ time }}</span>
@@ -66,6 +66,7 @@ export default {
             },
             recordTimelogtoLocaInterval: null,
             screenshotInterval: null,
+            isLoading: false,
         }
     },
     methods: {
@@ -94,15 +95,21 @@ export default {
                             await this.captureScreenshot();
                         }.bind(this), 350000)
                     } else {
+                        clearInterval(this.recordTimelogtoLocaInterval);
+                        clearInterval(this.screenshotInterval);
+
+                        this.recordTimelogtoLocaInterval = null;
+                        this.screenshotInterval = null;
+
                         let timeConsumed = this.stopTimer();
                         this.form.timeConsumed = timeConsumed;
 
+                        this.isLoading = true;
                         await this.pushTimelog(this.form);
+                        this.isLoading = false;
+
                         await this.fetchWeeklyTimelogs();
                         await this.fetchDailyTimelogs();
-
-                        clearInterval(this.recordTimelogtoLocaInterval);
-                        clearInterval(this.screenshotInterval);
                     }
                 }
             });
@@ -181,12 +188,21 @@ export default {
     },
     computed: {
         timerButtonVariant() {
+            if (this.isLoading)
+                return 'warning'
+
             return this.timerButton[this.getCurrentTimerStatus].variant;
         },
         timerButtonText() {
+            if (this.isLoading) 
+                return "Saving..."
+
             return this.timerButton[this.getCurrentTimerStatus].text;
         },
         timerButtonIcon() {
+            if (this.isLoading) 
+                return 'save';
+
             return this.timerButton[this.getCurrentTimerStatus].icon;
         },
         projects() {

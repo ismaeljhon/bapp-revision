@@ -13,7 +13,7 @@ let Timer = {
                     variant: 'success',
                     text: 'Start',
                     icon: 'play'
-                }
+                },
             },
             time: '00:00:00',
             timeBegan: null, 
