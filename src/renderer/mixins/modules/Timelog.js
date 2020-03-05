@@ -77,6 +77,7 @@ let Timelog = {
                     if (pushTimelog) {
                         this.pushTimelog(pendingTimelogs);
                     } else {
+                        Log.warning("Discard unsaved timelogs", { processType: 'process' })
                         localStorage.ZOHO_LAST_TIME_LOG = '';
                     }
                 })
