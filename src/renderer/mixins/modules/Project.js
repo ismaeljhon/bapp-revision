@@ -18,12 +18,12 @@ let Project = {
                 return this.project_api.index().then(response => {
                     localStorage.ZOHO_PROJECTS = JSON.stringify(response.data.projects);
                     this.$store.commit("SET_PROJECTS", response.data.projects)
-                    Log.success("[Response] Projects have been successfully fetched from API", { withPrompt: true, timer: 1500 })
+                    Log.success("[Response] Projects have been successfully fetched from API", { withPrompt: true, timer: 1500, processType: 'request' })
                 }).catch(error => {
-                    Log.error("[Response]" + error.response.data.message)
+                    Log.error(error.response.data.message, { processType: 'response' })
                 });
             } else {
-                Log.info("Projects have been successfully fetched from LocalStorage");
+                Log.info("Projects have been successfully fetched from LocalStorage", { processType: 'process' });
             }
 
             this.$store.commit("SET_PROJECTS", this.getProjects());
@@ -32,7 +32,7 @@ let Project = {
         },
         getProjects() {
             return JSON.parse(localStorage.ZOHO_PROJECTS);
-        }
+        },
     }
 };
 
