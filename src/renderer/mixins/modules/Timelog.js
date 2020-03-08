@@ -17,8 +17,9 @@ let Timelog = {
         pushTimelog(rawData) {
             let timelogData = this.getTimelogData(rawData);
 
-            let suffix = " - app generated";
-            let notes = timelogData.notes ? timelogData.notes + suffix : suffix;
+            let suffix = " - " + moment().format("MMDDYYYHHmmss");
+            let notes = "timesheet log : start time -" + localStorage.ZOHO_TIME_STARTED + " end time -" + moment().format('MM-DD-YYYY HH:mm A');
+            notes += timelogData.notes ? timelogData.notes + suffix : suffix;
             timelogData.notes = notes;
 
             let taskId = rawData.subTask ? rawData.subTask.id : rawData.task_id;

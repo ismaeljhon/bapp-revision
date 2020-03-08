@@ -42,6 +42,7 @@ import _forEach from 'lodash/forEach';
 import _find from 'lodash/find';
 import _assign from 'lodash/assign'
 import Log from '@/shared/Log'
+import moment from 'moment-timezone'
 
 export default {
     name: 'home',
@@ -76,6 +77,9 @@ export default {
                     this.$store.commit('SET_TIMER_STATUS');
                     if (this.$store.getters.TIMER_STARTED) {
                         this.startTimer();
+                        
+                        /** Save time started to local storage */
+                        localStorage.ZOHO_TIME_STARTED = moment().format('MM-DD-YYYY HH:mm A');
 
                         this.captureScreenshot();
 
