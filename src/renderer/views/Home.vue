@@ -4,8 +4,14 @@
             <b-form-group label="Project" :invalid-feedback="veeErrors.first('project')" :state="!veeErrors.has('project')">
                 <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="projects" v-model="form.project" placeholder="Select a Project" name="project" v-validate="{ required: true }" @input="getProjectTasks"></v-select>
             </b-form-group>
-            <b-form-group label="Task" :invalid-feedback="veeErrors.first('task')" :state="!veeErrors.has('task')">
-                <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="tasks" v-model="form.task" placeholder="Pick a Task" name="task" v-validate="{ required: true }" @input="getSubTasks"></v-select>
+            <b-form-group label-for="task-list" label="Task" :invalid-feedback="veeErrors.first('task')" :state="!veeErrors.has('task')">
+                <template slot="label">
+                    <span>Task</span>
+                    <div class="float-right">
+                        <a v-if="form.project" href="#" @click.prevent="$refs.taskFormModal.show(form.project)"><small><font-awesome-icon icon="plus"></font-awesome-icon> Add new task</small></a>
+                    </div>
+                </template>
+                <v-select id="task-list" :disabled="$store.getters.TIMER_STARTED" label="name" :options="tasks" v-model="form.task" placeholder="Pick a Task" name="task" v-validate="{ required: true }" @input="getSubTasks"></v-select>
             </b-form-group>
             <b-form-group v-if="hasSubTasks" label="Sub Task">
                 <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="subTasks" v-model="form.subTask" placeholder="Pick a Sub Task"></v-select>
@@ -29,6 +35,8 @@
         <b-col cols="6" class="mt-4">
             <timelog-summary />
         </b-col>
+
+        <task-form-modal ref="taskFormModal" />
     </b-row>
 </template>
 <script>
@@ -43,16 +51,19 @@ import _find from 'lodash/find';
 import _assign from 'lodash/assign'
 import Log from '@/shared/Log'
 
+import TaskFormModal from '@/views/modals/Task'
+
 export default {
     name: 'home',
     components: {
         'latest-screenshot': LatestScreenshot,
-        'timelog-summary': TimelogSummary
+        'timelog-summary': TimelogSummary,
+        TaskFormModal
     },
     data() {
         return {
             form: {
-                project: '',
+                project: null,
                 project_id: '',
                 task: '',
                 task_id: '',
