@@ -1,8 +1,8 @@
 <template>
     <b-modal :visible="showModal" @hide="showModal = false" @hidden="reset" hide-footer centered title="Adding New Task">
         <h6>Project: {{ item.name }}</h6>
-        <b-form-group label="Task name:">
-            <b-input v-model="form.name"></b-input>
+        <b-form-group label="Task name:" :invalid-feedback="veeErrors.first('name')" :state="!veeErrors.has('name')">
+            <b-input v-model="form.name" name="name" v-validate="'required'"></b-input>
         </b-form-group>
         <b-form-group>
             <template slot="label">
@@ -56,19 +56,26 @@ export default {
             })
         },
         onSubmit() {
-            let currentUser = this.getCurrentUser();
-            this.form.person_responsible = currentUser.id
+            this.$validator.validateAll().then(noerrors => {
+                if (noerrors) {
+                    this.isLoading = true;
+                    let currentUser = this.getCurrentUser();
+                    this.form.person_responsible = currentUser.id
 
-            Log.info("Adding new task...", { processType: 'request' })
+                    Log.info("Adding new task...", { processType: 'request' })
 
-            return new RestApiService('/portal/' + process.env.PORTAL_ID + "/projects/" + this.item.id + "/tasks/").save({ params: this.form }, true)
-                .then(response => {
-                    Log.success("New Task has been successfully saved", { withPrompt: true, processType: 'response' })
-                    this.showModal = false;
-                    this.$emit('saved');
-                }).catch(error => {
-                    Log.error(error.response.data.error.message, { processType: 'response' })
-                })
+                    return new RestApiService('/portal/' + process.env.PORTAL_ID + "/projects/" + this.item.id + "/tasks/").save({ params: this.form }, true)
+                        .then(response => {
+                            this.isLoading = false;
+                            Log.success("New Task has been successfully saved", { withPrompt: true, processType: 'response', rawData: response.data })
+                            this.showModal = false;
+                            this.$emit('saved');
+                        }).catch(error => {
+                            this.isLoading = false;
+                            Log.error(error.response.data.error.message, { processType: 'response' })
+                        })
+                }
+            })
         }
     },
     computed: {
