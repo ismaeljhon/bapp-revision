@@ -74,9 +74,11 @@ let Timelog = {
                             value: true
                         }
                     },
-                }).then(pushTimelog => {
+                }).then(async (pushTimelog) => {
                     if (pushTimelog) {
-                        this.pushTimelog(pendingTimelogs);
+                        this.$store.commit('SET_TIMER_READY')
+                        await this.pushTimelog(pendingTimelogs);
+                        this.$store.commit('SET_TIMER_READY')
                     } else {
                         Log.warning("Discard unsaved timelogs", { processType: 'process' })
                         localStorage.ZOHO_LAST_TIME_LOG = '';

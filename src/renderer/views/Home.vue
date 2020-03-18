@@ -15,7 +15,7 @@
             </b-form-group>
         </b-col>
         <b-col cols="12">
-            <b-button ref="timerButton" :variant="timerButtonVariant" :disabled="isLoading" size="lg" @click.prevent="setupTimer" style="text-transform: uppercase">
+            <b-button ref="timerButton" :variant="timerButtonVariant" :disabled="isLoading || !$store.getters.TIMER_READY" size="lg" @click.prevent="setupTimer" style="text-transform: uppercase">
                 <font-awesome-icon :icon="timerButtonIcon" class="mr-2" />{{ timerButtonText }}
             </b-button>
             <span class="ml-2" v-show="$store.getters.TIMER_STARTED">{{ time }}</span>
