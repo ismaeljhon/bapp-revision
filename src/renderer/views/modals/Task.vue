@@ -10,22 +10,31 @@
             </template>
             <b-input v-model="form.description"></b-input>
         </b-form-group>
-        <b-form-group>
+        <b-form-group label-for="task-list">
             <template slot="label">
                 TaskList: <small>(optional)</small>
+                <div class="float-right">
+                    <a href="#" @click.prevent="$refs.tasklistFormModal.show(item)"><small><font-awesome-icon icon="plus"></font-awesome-icon> Add new tasklist</small></a>
+                </div>
             </template>
-            <v-select label="name" :options="taskLists" v-model="taskListSelected" placeholder="Pick a Task List" @input="form.tasklist_id = taskListSelected ? taskListSelected.id_string : null"></v-select>
+            <v-select label="name" id="task-list" :options="taskLists" v-model="taskListSelected" placeholder="Pick a Task List" @input="form.tasklist_id = taskListSelected ? taskListSelected.id_string : null"></v-select>
         </b-form-group>
         <b-button class="float-right" variant="success" @click.prevent="onSubmit" :disabled="isLoading">{{ isLoading ? 'Saving...' : 'Save' }}</b-button>
+
+        <tasklist-form-modal ref="tasklistFormModal" />
     </b-modal>
 </template>
 <script>
 import _assign from 'lodash/assign';
 import RestApiService from '@/services/RestApiService.js';
 import Log from '@/shared/Log'
+import TasklistFormModal from '@/views/modals/Tasklist';
 
 export default {
     name: 'task-form-modal',
+    components: {
+        TasklistFormModal
+    },
     data() {
         return {
             showModal: false,
