@@ -4,7 +4,7 @@
             <b-input v-model="form.name" name="name" v-validate="'required'"></b-input>
         </b-form-group>
         <b-form-group label="Flag:" :invalid-feedback="veeErrors.first('flag')" :state="!veeErrors.has('flag')">
-            <b-form-select :options="flagOptions" name="flag" v-validate="'required'"></b-form-select>
+            <b-form-select :options="flagOptions" v-model="form.flag" name="flag" v-validate="'required'"></b-form-select>
         </b-form-group>
         <b-button class="float-right" variant="success" :disabled="isLoading" @click.prevent="onSubmit">{{ isLoading ? 'Saving...' : 'Save' }}</b-button>
     </b-modal>
@@ -50,8 +50,10 @@ export default {
                     return new RestApiService('/portal/' + process.env.PORTAL_ID + "/projects/" + this.item.id + "/tasklists/")
                         .save({ params : this.form }, true)
                         .then(response => {
+                            this.isLoading = false;
                             this.showModal = false
                             Log.success("New TaskList has been successfully saved", { withPrompt: true, processType: 'response', rawData: response.data })
+                            this.$emit('saved');
                         }).catch(error => {
                             this.isLoading = false;
                             Log.error(error.response.data.error.message, { processType: 'response' })

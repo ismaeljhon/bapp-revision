@@ -21,7 +21,7 @@
         </b-form-group>
         <b-button class="float-right" variant="success" @click.prevent="onSubmit" :disabled="isLoading">{{ isLoading ? 'Saving...' : 'Save' }}</b-button>
 
-        <tasklist-form-modal ref="tasklistFormModal" />
+        <tasklist-form-modal ref="tasklistFormModal" @saved="fetchProjectTaskLists(true)" />
     </b-modal>
 </template>
 <script>
@@ -40,7 +40,6 @@ export default {
             showModal: false,
             item: {},
             form: {},
-            taskLists: [],
             taskListSelected: null,
             isLoading: false
         }
@@ -53,7 +52,6 @@ export default {
             })
 
             await this.fetchProjectTaskLists(true);
-            this.taskLists = this.$store.getters.PROJECT_TASK_LISTS;
         },
         reset() {
             _assign(this, {
@@ -90,6 +88,9 @@ export default {
     computed: {
         title() {
             return this.item ? "Project: " + this.item.name : "";
+        },
+        taskLists() {
+            return this.$store.getters.PROJECT_TASK_LISTS;
         }
     }
 }
