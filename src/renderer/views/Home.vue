@@ -13,7 +13,7 @@
                 </template>
                 <v-select id="task-list" :disabled="$store.getters.TIMER_STARTED" label="name" :options="tasks" v-model="form.task" placeholder="Pick a Task" name="task" v-validate="{ required: true }" @input="getSubTasks"></v-select>
             </b-form-group>
-            <b-form-group v-if="hasSubTasks" label="Sub Task">
+            <b-form-group v-if="form.task" label="Sub Task">
                 <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="subTasks" v-model="form.subTask" placeholder="Pick a Sub Task"></v-select>
             </b-form-group>
             <b-form-group label="Notes">
@@ -229,9 +229,6 @@ export default {
             })
 
             return projects;
-        },
-        hasSubTasks() {
-            return this.form.task && this.form.task.subTasksUrl;
         },
     },
     async mounted() {
