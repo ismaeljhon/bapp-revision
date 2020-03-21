@@ -13,8 +13,14 @@
                 </template>
                 <v-select id="task-list" :disabled="$store.getters.TIMER_STARTED" label="name" :options="tasks" v-model="form.task" placeholder="Pick a Task" name="task" v-validate="{ required: true }" @input="getSubTasks"></v-select>
             </b-form-group>
-            <b-form-group v-if="form.task" label="Sub Task">
-                <v-select :disabled="$store.getters.TIMER_STARTED" label="name" :options="subTasks" v-model="form.subTask" placeholder="Pick a Sub Task"></v-select>
+            <b-form-group v-if="form.task" label-for="sub-task">
+                <template slot="label">
+                    <span>Sub Task</span>
+                    <div class="float-right">
+                        <a v-if="form.task" href="#" @click.prevent=""><small><font-awesome-icon icon="plus"></font-awesome-icon> Add new sub task</small></a>
+                    </div>
+                </template>
+                <v-select id="sub-task" :disabled="$store.getters.TIMER_STARTED" label="name" :options="subTasks" v-model="form.subTask" placeholder="Pick a Sub Task"></v-select>
             </b-form-group>
             <b-form-group label="Notes">
                 <b-form-textarea :disabled="$store.getters.TIMER_STARTED" v-model="form.notes" rows="3" max-rows="6"></b-form-textarea>
@@ -36,7 +42,8 @@
             <timelog-summary />
         </b-col>
 
-        <task-form-modal ref="taskFormModal" />
+        <task-form-modal ref="taskFormModal" @saved="getProjectTasks(form.project)" />
+        <sub-task-form-modal ref="subTaskFormModal" @saved="getProjectTasks(form.project)" />
     </b-row>
 </template>
 <script>
@@ -52,13 +59,15 @@ import _assign from 'lodash/assign'
 import Log from '@/shared/Log'
 
 import TaskFormModal from '@/views/modals/Task'
+import SubTaskFormModal from '@/views/modals/SubTask'
 
 export default {
     name: 'home',
     components: {
         'latest-screenshot': LatestScreenshot,
         'timelog-summary': TimelogSummary,
-        TaskFormModal
+        TaskFormModal,
+        SubTaskFormModal
     },
     data() {
         return {
@@ -126,6 +135,7 @@ export default {
             });
         },
         getProjectTasks(project) {
+
             _assign(this.form, {
                 task: '',
                 subTask: '',
