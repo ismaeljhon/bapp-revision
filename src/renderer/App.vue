@@ -37,7 +37,7 @@ export default {
         TimesheetModal
     },
     mounted: async function() {
-        this.fetchProjects();
+        this.fetchProjects(true);
         this.fetchUsers();
         await this.checkPendingTimelogs();
         
