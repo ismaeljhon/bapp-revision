@@ -1,5 +1,5 @@
 <template>
-    <b-modal :visible="showModal" @hide="showModal = false" @hidden="reset" title="Adding new sub task">
+    <b-modal :visible="showModal" @hide="showModal = false" @hidden="reset" title="Adding new sub task" hide-footer>
         <b-form-group label="Name:" :invalid-feedback="veeErrors.first('name')" :state="!veeErrors.has('name')">
             <b-input v-model="form.name" name="name" v-validate="'required'"></b-input>
         </b-form-group>
@@ -9,11 +9,13 @@
             </template>
             <b-input v-model="form.description"></b-input>
         </b-form-group>
+        <b-button @click.prevent="onSubmit" :disabled="isLoading" variant="success">{{ isLoading ? 'Saving...' : 'Save' }}</b-button>
     </b-modal>
 </template>
 <script>
 import _assign from 'lodash/assign';
 import RestApiService from '../../services/RestApiService';
+import Log from '@/shared/Log'
 
 export default {
     name: 'sub-task-form-modal',
@@ -41,6 +43,10 @@ export default {
         },
         onSubmit() {
             this.isLoading = true;
+            let currentUser = this.getCurrentUser();
+            this.form.person_responsible = currentUser.id
+
+            Log.info("Adding new task...", { processType: 'request' })
 
             return new RestApiService('/portal/' + process.env.PORTAL_ID + "/projects/" + this.item.project.id + "/tasks/" + this.item.task.id + "/subtasks/").save({ params: this.form }, true)
             .then(response => {

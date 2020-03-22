@@ -17,7 +17,7 @@
                 <template slot="label">
                     <span>Sub Task</span>
                     <div class="float-right">
-                        <a v-if="form.task" href="#" @click.prevent=""><small><font-awesome-icon icon="plus"></font-awesome-icon> Add new sub task</small></a>
+                        <a v-if="form.task" href="#" @click.prevent="$refs.subTaskFormModal.show(form)"><small><font-awesome-icon icon="plus"></font-awesome-icon> Add new sub task</small></a>
                     </div>
                 </template>
                 <v-select id="sub-task" :disabled="$store.getters.TIMER_STARTED" label="name" :options="subTasks" v-model="form.subTask" placeholder="Pick a Sub Task"></v-select>
@@ -43,7 +43,7 @@
         </b-col>
 
         <task-form-modal ref="taskFormModal" @saved="getProjectTasks(form.project)" />
-        <sub-task-form-modal ref="subTaskFormModal" @saved="getProjectTasks(form.project)" />
+        <sub-task-form-modal ref="subTaskFormModal" @saved="getProjectTasks(form.project); getSubTasks(form.task)" />
     </b-row>
 </template>
 <script>
