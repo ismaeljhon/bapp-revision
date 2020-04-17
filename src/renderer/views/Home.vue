@@ -7,7 +7,7 @@
             <b-form-group label-for="task-list" label="Task" :invalid-feedback="veeErrors.first('task')" :state="!veeErrors.has('task')">
                 <template slot="label">
                     <span>Task</span>
-                    <div class="float-right">
+                    <div class="float-right" v-show="!$store.getters.TIMER_STARTED">
                         <a v-if="form.project" href="#" @click.prevent="$refs.taskFormModal.show(form.project)"><small><font-awesome-icon icon="plus"></font-awesome-icon> Add new task</small></a>
                     </div>
                 </template>
@@ -16,7 +16,7 @@
             <b-form-group v-if="form.task" label-for="sub-task">
                 <template slot="label">
                     <span>Sub Task</span>
-                    <div class="float-right">
+                    <div class="float-right" v-show="!$store.getters.TIMER_STARTED">
                         <a v-if="form.task" href="#" @click.prevent="$refs.subTaskFormModal.show(form)"><small><font-awesome-icon icon="plus"></font-awesome-icon> Add new sub task</small></a>
                     </div>
                 </template>
