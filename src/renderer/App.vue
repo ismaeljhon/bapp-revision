@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <b-navbar type="dark">
-            <a href="#" @click.prevent="fetchProjects(true)" v-b-tooltip title="Fetch Latest Projects">
+            <a href="#" v-show="!$store.getters.TIMER_STARTED" @click.prevent="fetchProjects(true)" v-b-tooltip title="Fetch Latest Projects">
                 <font-awesome-icon icon="sync-alt" class="mr-2 text-light"></font-awesome-icon>
             </a>
             <b-navbar-brand href="#">
