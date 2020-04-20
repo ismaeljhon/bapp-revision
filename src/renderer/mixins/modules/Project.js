@@ -5,7 +5,7 @@ import Log from '@/shared/Log'
 let Project = {
     data() {
         return {
-            project_api: new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/'),
+            project_api: new RestApiService('/portal/' + process.env.ZOHO_PORTAL_ID + '/projects/'),
         }
     },
     methods: {
@@ -20,7 +20,7 @@ let Project = {
                     this.$store.commit("SET_PROJECTS", response.data.projects)
                     Log.success("Projects have been successfully fetched from API", { withPrompt: true, timer: 1500, processType: 'response' })
                 }).catch(error => {
-                    Log.error(error.response.data.message, { processType: 'response' })
+                    Log.error(error.response.data.error.message, { processType: 'response' })
                 });
             } else {
                 Log.info("Projects have been successfully fetched from LocalStorage", { processType: 'process' });
@@ -52,7 +52,7 @@ let Project = {
                     projectTasklists = _.union(projectTasklists, this.beautifyTaskListName(response.data.tasklists, params))
                     Log.success("Project Task Lists have been successfully fetched from API", { processType: 'response' })
                 }).catch(error => {
-                    Log.error(error.response.data.message + " - external task list", { processType: 'response' })
+                    Log.error(error.response.data.error.message + " - external task list", { processType: 'response' })
                 });
 
                 localStorage.ZOHO_PROJECT_TASK_LISTS = JSON.stringify(projectTasklists);
@@ -76,7 +76,7 @@ let Project = {
     },
     computed: {
         projectTasklistsApi() {
-            return new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/' + this.item.id + '/tasklists/')
+            return new RestApiService('/portal/' + process.env.ZOHO_PORTAL_ID + '/projects/' + this.item.id + '/tasklists/')
         }
     }
 };

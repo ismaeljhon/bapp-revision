@@ -14,6 +14,9 @@
                         <font-awesome-icon icon="calendar-alt"></font-awesome-icon> Timesheet
                     </b-dropdown-item>
                     <b-dropdown-divider></b-dropdown-divider>
+                    <b-dropdown-item @click.prevent="$refs.updateApiKeysModal.show()" variant="warning">
+                        <font-awesome-icon icon="key"></font-awesome-icon> API Keys
+                    </b-dropdown-item>
                     <b-dropdown-item @click.prevent="logout" :disabled="$store.getters.TIMER_STARTED"><font-awesome-icon icon="sign-out-alt"></font-awesome-icon> Logout</b-dropdown-item>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
@@ -23,20 +26,33 @@
         </b-container>
 
         <timesheet-modal ref="timesheetModal" />
+        <update-api-keys-modal ref="updateApiKeysModal" />
     </div>
 </template>
 
 <script>
 import TimesheetModal from './views/modals/Timesheet';
+import UpdateApiKeysModal from '@/views/modals/UpdateAPIKeys';
+import Log from '@/shared/Log'
 const {app} = require('electron')
 import exec from 'await-exec';
+import _forEach from 'lodash/forEach';
 
 export default {
     name: 'bickert-tracker-app',
     components: {
-        TimesheetModal
+        TimesheetModal,
+        UpdateApiKeysModal
     },
     mounted: async function() {
+        let noRequiredApiKeys = await this.validateRequiredApiKeys();
+
+        if (noRequiredApiKeys.length > 0) {
+            this.$refs.updateApiKeysModal.show({ forcedOpen: true })
+        }
+
+        console.log(process.env)
+
         this.fetchProjects(true);
         this.fetchUsers();
         await this.checkPendingTimelogs();
@@ -50,7 +66,7 @@ export default {
                     icon: 'warning',
                     text: 'Cannot create public folder in your machine (' + process.platform + ")\nWe will be using the program folder in behalf.. \n Please make sure you run this application as administrator."
                 })
-        }
+        }   
     },
     methods: {
         logout() {

@@ -26,7 +26,7 @@ let Timelog = {
             
             Log.info("Pushing Timelog " + JSON.stringify(rawData), { processType: 'request' });
 
-            return new RestApiService('/portal/' + process.env.PORTAL_ID + "/projects/" + rawData.project_id + "/tasks/" + taskId + "/logs/")
+            return new RestApiService('/portal/' + process.env.ZOHO_PORTAL_ID + "/projects/" + rawData.project_id + "/tasks/" + taskId + "/logs/")
                 .save({ params: timelogData }, true)
                     .then(response => {
                         localStorage.ZOHO_LAST_TIME_LOG = '';
@@ -97,7 +97,7 @@ let Timelog = {
 
             Log.info("Fetch weekly Timelog ", { processType: 'request' })
 
-            return new RestApiService('/portal/' + process.env.PORTAL_ID + '/logs')
+            return new RestApiService('/portal/' + process.env.ZOHO_PORTAL_ID + '/logs')
             .index(params)
                 .then(response => {
                     let timelogs = response.data.timelogs || {};
@@ -128,7 +128,7 @@ let Timelog = {
 
             Log.info("Fetch daily Timelog ", { processType: 'request' })
 
-            return new RestApiService('/portal/' + process.env.PORTAL_ID + '/logs')
+            return new RestApiService('/portal/' + process.env.ZOHO_PORTAL_ID + '/logs')
             .index(params)
                 .then(response => {
                     let timelogs = response.data.timelogs || {};

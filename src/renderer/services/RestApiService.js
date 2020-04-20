@@ -35,7 +35,7 @@ let RestApiService = class RestApiService{
                 originalRequest._retry = true;
                 const refreshToken = storageService.getRefreshToken();
 
-                return axios.post(process.env.ACCOUNTS_API + '/oauth/v2/token?grant_type=refresh_token&refresh_token=' + refreshToken + '&client_id=' + process.env.CLIENT_ID + '&client_secret=' + process.env.CLIENT_SECRET
+                return axios.post(process.env.ACCOUNTS_API + '/oauth/v2/token?grant_type=refresh_token&refresh_token=' + refreshToken + '&client_id=' + process.env.ZOHO_CLIENT_ID + '&client_secret=' + process.env.ZOHO_CLIENT_SECRET
                 )
                     .then(res => {
                         if (res.status === 201 || res.status === 200) {

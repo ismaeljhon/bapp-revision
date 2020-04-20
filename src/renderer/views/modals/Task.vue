@@ -71,7 +71,7 @@ export default {
 
                     Log.info("Adding new task...", { processType: 'request' })
 
-                    return new RestApiService('/portal/' + process.env.PORTAL_ID + "/projects/" + this.item.id + "/tasks/").save({ params: this.form }, true)
+                    return new RestApiService('/portal/' + process.env.ZOHO_PORTAL_ID + "/projects/" + this.item.id + "/tasks/").save({ params: this.form }, true)
                         .then(response => {
                             this.isLoading = false;
                             Log.success("New Task has been successfully saved", { withPrompt: true, processType: 'response', rawData: response.data })

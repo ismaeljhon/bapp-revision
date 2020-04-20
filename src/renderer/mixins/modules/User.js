@@ -9,7 +9,7 @@ let User = {
         },
         fetchUsers() {
             if (!localStorage.ZOHO_USERS) {
-                return new RestApiService('/portal/' + process.env.PORTAL_ID + '/users/').index().then(response => {
+                return new RestApiService('/portal/' + process.env.ZOHO_PORTAL_ID + '/users/').index().then(response => {
                     localStorage.setItem('ZOHO_USERS', JSON.stringify(response.data.users));
                 }).catch(error => {
                     Log.error(error.data.error.message);

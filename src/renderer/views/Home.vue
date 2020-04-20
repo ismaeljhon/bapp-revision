@@ -83,7 +83,7 @@ export default {
             tasks: [],
             subTasks: [],
             api: {
-                project: new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/')
+                project: new RestApiService('/portal/' + process.env.ZOHO_PORTAL_ID + '/projects/')
             },
             recordTimelogtoLocaInterval: null,
             screenshotInterval: null,
@@ -149,7 +149,7 @@ export default {
                 let currentUser = this.getCurrentUser();
 
                 Log.info("getProjectTasks - Project ID:" + project.id, { processType: 'request' })
-                new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/' + project.id + "/tasks/").index({ owner: currentUser.id })
+                new RestApiService('/portal/' + process.env.ZOHO_PORTAL_ID + '/projects/' + project.id + "/tasks/").index({ owner: currentUser.id })
                 .then(response => {
                     let tasks = [];
 

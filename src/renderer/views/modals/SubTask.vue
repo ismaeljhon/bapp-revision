@@ -48,7 +48,7 @@ export default {
 
             Log.info("Adding new task...", { processType: 'request' })
 
-            return new RestApiService('/portal/' + process.env.PORTAL_ID + "/projects/" + this.item.project.id + "/tasks/" + this.item.task.id + "/subtasks/").save({ params: this.form }, true)
+            return new RestApiService('/portal/' + process.env.ZOHO_PORTAL_ID + "/projects/" + this.item.project.id + "/tasks/" + this.item.task.id + "/subtasks/").save({ params: this.form }, true)
             .then(response => {
                 this.$emit('saved'),
                 this.showModal = false
