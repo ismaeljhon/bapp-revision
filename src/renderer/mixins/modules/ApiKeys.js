@@ -2,7 +2,7 @@ import _forEach from 'lodash/forEach'
 export default {
     data() {
         return {
-            apiKeysRequired: ['ZOHO_CLIENT_ID', 'ZOHO_CLIENT_SECRET', 'ZOHO_REFRESH_TOKEN', 'ZOHO_PORTAL_ID', 'ZOHO_FILE_CAT_ID', 'ZOHO_ACCESS_TOKEN_V1'],
+            apiKeysRequired: ['ZOHO_CLIENT_ID', 'ZOHO_CLIENT_SECRET', 'ZOHO_REFRESH_TOKEN', 'ZOHO_PORTAL_ID', 'ZOHO_FILE_CAT_ID'],
         }
     },
     methods: {

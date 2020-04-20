@@ -18,9 +18,6 @@
         <b-form-group label="Zoho People File Category ID" description="Leave blank if you are not sure">
             <b-input v-model="form.ZOHO_FILE_CAT_ID"></b-input>
         </b-form-group>
-        <b-form-group label="Zoho Account Access Token V1" description="Leave blank if you are not sure">
-            <b-input v-model="form.ZOHO_ACCESS_TOKEN_V1"></b-input>
-        </b-form-group>
         <div class="float-right">
             <b-button v-if="!item.forcedOpen" class="mr-1" @click.prevent="showModal = false">Cancel</b-button>
             <b-button variant="success" @click.prevent="onSubmit">Save</b-button>
@@ -30,6 +27,7 @@
 <script>
 import _assign from "lodash/assign"
 import _forEach from 'lodash/forEach'
+import Log from '@/shared/Log'
 export default {
     name: 'update-api-keys-modal',
     data() {
@@ -71,15 +69,20 @@ export default {
                 buttons: true,
                 dangerMode: true,
             })
-            .then((willUpdate) => {
+            .then(async (willUpdate) => {
                 if (willUpdate) {
-                    _forEach(this.apiKeysRequired, (keyValue) => {
+                    Log.info("Updating API Keys...", { processType: 'process' })
+                    let msg = "";
+                    await _forEach(this.apiKeysRequired, (keyValue) => {
                         if (this.form[keyValue]) {
                             localStorage[keyValue] = this.form[keyValue]
+                            msg += keyValue + ": " + process.env[keyValue] + " => " + localStorage[keyValue] + ", "
                         }
                     })
 
                     this.validateRequiredApiKeys()
+
+                    Log.info("API Keys Updated..." + msg, { processType: 'process' })
                 }
             })
         }
