@@ -23,23 +23,26 @@
         </b-container>
 
         <timesheet-modal ref="timesheetModal" />
+        <pending-timelog-modal />
     </div>
 </template>
 
 <script>
-import TimesheetModal from './views/modals/Timesheet';
+import TimesheetModal from '@/views/modals/Timesheet';
+import PendingTimelogModal from '@/views/modals/PendingTimelog'
+
 const {app} = require('electron')
 import exec from 'await-exec';
 
 export default {
     name: 'bickert-tracker-app',
     components: {
-        TimesheetModal
+        TimesheetModal,
+        PendingTimelogModal
     },
     mounted: async function() {
         this.fetchProjects(true);
         this.fetchUsers();
-        await this.checkPendingTimelogs();
         
         if (process.platform == 'win32') {
             await exec(`md ${process.env.ZOHO_SCREENSHOT_FOLDER}`)

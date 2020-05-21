@@ -16,7 +16,13 @@ let Screenshot = {
             let currentUser =  this.getCurrentUser();
             let screenshotFile = _camelCase(currentUser.name) +"-" + moment().format('DDMMYYYY-hhmmss') + manualFilename +".jpg";
 
-            let prefix = process.platform == 'win32' ? process.env.ZOHO_SCREENSHOT_FOLDER : rootPath + "/screenshots/";
+            let currentRootPath = rootPath;
+
+            if (process.platform == 'darwin' && process.env.NODE_ENV != 'development') {
+                currentRootPath += "/Contents";
+            }
+
+            let prefix = process.platform == 'win32' ? process.env.ZOHO_SCREENSHOT_FOLDER : currentRootPath + "/screenshots/";
             let screenshotFilePath = prefix + screenshotFile;
 
             const data = await takeScreenshot("image/jpg");

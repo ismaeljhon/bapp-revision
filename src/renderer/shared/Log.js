@@ -35,13 +35,11 @@ const Log = {
         log.info((data.processType ? "[Warning][" + data.processType.toUpperCase() + "]" : "") + msg);
     },
     error(msg, data = {}) {
-        if (data.withPrompt) {
-            swal({
-                icon: 'error',
-                title: "Error",
-                text: msg,
-            })
-        }
+        swal({
+            icon: 'error',
+            title: "Error",
+            text: msg,
+        })
         log.error((data.processType ? "[" + data.processType.toUpperCase() + "]" : "") + msg);
     }
 }

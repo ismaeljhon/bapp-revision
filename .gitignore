@@ -9,6 +9,7 @@ npm-debug.log.*
 thumbs.db
 !.gitkeep
 .env
+src/renderer/macEnv.js
 
 screenshots/*
 !screenshots/log.txt
