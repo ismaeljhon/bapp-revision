@@ -9,6 +9,8 @@
     "build": "node .electron-vue/build.js && electron-builder",
     "build:win64": "node .electron-vue/build.js && electron-builder --win --x64",
     "build:win32": "node .electron-vue/build.js && electron-builder --win --ia32",
+    "build:mac64": "node .electron-vue/build.js && electron-builder --mac --x64",
+    "build:mac32": "node .electron-vue/build.js && electron-builder --mac --ia32",
     "build:all": "electron-builder -mw",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
