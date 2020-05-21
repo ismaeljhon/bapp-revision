@@ -33,6 +33,9 @@ let Timelog = {
                     });
         },
         getTimelogData(data) {
+            if (!data)
+                return;
+                
             let currentUser = this.getCurrentUser();
             let timeConsumed = data.timeConsumed.split(':');
             timeConsumed.pop();
@@ -46,12 +49,11 @@ let Timelog = {
                 notes: data.notes
             };
         },
-        checkPendingTimelogs() {
-            let pendingTimelogs = localStorage.ZOHO_LAST_TIME_LOG;
+        getPendingTimelog() {
+            let pendingTimelog = localStorage.ZOHO_LAST_TIME_LOG
+            if (!pendingTimelog) return false
+            return JSON.parse(pendingTimelog)
 
-            if(!pendingTimelogs) return false; 
-
-            pendingTimelogs = JSON.parse(pendingTimelogs);
             let currentUser = this.getCurrentUser();
 
             if (currentUser.id == pendingTimelogs.owner) {
