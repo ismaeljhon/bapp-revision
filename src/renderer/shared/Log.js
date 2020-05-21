@@ -33,15 +33,13 @@ const Log = {
         }
         console.log(msg);
     },
-    error(msg, withPrompt = true) {
-        if (withPrompt) {
-            swal({
-                icon: 'error',
-                title: "Error",
-                text: msg,
-            })
-        }
-        console.log(msg);
+    error(msg, data = {}) {
+        swal({
+            icon: 'error',
+            title: "Error",
+            text: msg,
+        })
+        log.error((data.processType ? "[" + data.processType.toUpperCase() + "]" : "") + msg);
     }
 }
 
