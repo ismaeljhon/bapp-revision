@@ -40,7 +40,9 @@ import mixins from './mixins'
 import moment from 'moment-timezone';
 moment.tz.setDefault('America/Edmonton');
 
-import MacEnv from '@/macEnv';
+if (process.platform == 'darwin') {
+  require('@/macEnv')
+}
 
 /* eslint-disable no-new */
 new Vue({
