@@ -5,7 +5,7 @@ import Log from '@/shared/Log'
 let Project = {
     data() {
         return {
-            project_api: new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/'),
+            project_api: new RestApiService('/portal/' + process.env.VUE_APP_PORTAL_ID + '/projects/'),
         }
     },
     methods: {
@@ -76,7 +76,7 @@ let Project = {
     },
     computed: {
         projectTasklistsApi() {
-            return new RestApiService('/portal/' + process.env.PORTAL_ID + '/projects/' + this.item.id + '/tasklists/')
+            return new RestApiService('/portal/' + process.env.VUE_APP_PORTAL_ID + '/projects/' + this.item.id + '/tasklists/')
         }
     }
 };

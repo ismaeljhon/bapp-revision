@@ -45,7 +45,7 @@ export default {
         this.fetchUsers();
         
         if (process.platform == 'win32') {
-            await exec(`md ${process.env.ZOHO_SCREENSHOT_FOLDER}`)
+            await exec(`md ${process.env.VUE_APP_ZOHO_SCREENSHOT_FOLDER}`)
         } else {
             if (!localStorage.ZOHO_LAST_TIME_LOG)
                 swal({

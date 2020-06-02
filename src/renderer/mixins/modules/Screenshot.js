@@ -22,7 +22,7 @@ let Screenshot = {
                 currentRootPath += "/Contents";
             }
 
-            let prefix = process.platform == 'win32' ? process.env.ZOHO_SCREENSHOT_FOLDER : currentRootPath + "/screenshots/";
+            let prefix = process.platform == 'win32' ? process.env.VUE_APP_ZOHO_SCREENSHOT_FOLDER : currentRootPath + "/screenshots/";
             let screenshotFilePath = prefix + screenshotFile;
 
             const data = await takeScreenshot("image/jpg");
@@ -70,7 +70,7 @@ let Screenshot = {
 				// setting up the parameters needed for the POST request
 				let formParams = {
 					authtoken: localStorage.ZOHO_ACCESS_TOKEN_V1,
-					catId: process.env.ZOHO_FILE_CAT_ID,
+					catId: process.env.VUE_APP_ZOHO_FILE_CAT_ID,
 					confidential: 1,
 					employeeId: employeeObj.recordId,
 					fileName: filename,
