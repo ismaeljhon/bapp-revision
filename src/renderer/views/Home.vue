@@ -246,7 +246,7 @@ export default {
         },
     },
     async mounted() {
-        if (!process.env.ZOHO_ACCESS_TOKEN_V1) {
+        if (!localStorage.ZOHO_ACCESS_TOKEN_V1) {
             Log.error("No Authentication V1 key set, please reach out for some help")
             return false;
         }
