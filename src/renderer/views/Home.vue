@@ -167,7 +167,7 @@ export default {
                     Log.info("Task successfuly fetched - Project ID:" + project.id, { processType: 'response' })
 
                 }).catch(error => {
-                    Log.error(error, { processType: 'response' })
+                    Log.error(error, { processType: 'response', customMessage: 'Error on fetching tasks per project' })
                 })
             }
         },
@@ -191,7 +191,7 @@ export default {
                     });
                     this.subTasks = subTasks;
                 }).catch(error => {
-                    Log.error(error.response.data.error.message);
+                    Log.error(error, { processType: 'response', customMessage: 'Error on fetching sub tasks' });
                 });
             }
         },
@@ -247,7 +247,7 @@ export default {
     },
     async mounted() {
         if (!localStorage.ZOHO_ACCESS_TOKEN_V1) {
-            Log.error("No Authentication V1 key set, please reach out for some help")
+            Log.error({}, { processType: 'process', customMessage: "No Authentication V1 key set, please reach out for some help" })
             return false;
         }
         new AuthenticationV1().validate();

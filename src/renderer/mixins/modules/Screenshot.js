@@ -28,7 +28,7 @@ let Screenshot = {
             const data = await takeScreenshot("image/jpg");
             fs.writeFile(screenshotFilePath, data.buffer, (error) => {
                 if (error) {
-                    Log.error(error, { processType: 'error' });
+                    Log.error(error, { processType: 'error', customMessage: "Error on taking screenshot" });
                 }
 
                 Log.info("Screenshot successfully captured and saved " + screenshotFilePath, { processType: 'process' });
@@ -86,7 +86,7 @@ let Screenshot = {
 				}
 
 				if (!response.data)
-					return Log.error("Error on fetching the image blob", { processType: 'responst' });
+					return Log.error({}, { processType: 'response', customMessage: "Error on fetching the image blob"});
 
 				// translating the response data to BLOB object
 				let imageBlob = new Blob([response.data]);
@@ -105,7 +105,7 @@ let Screenshot = {
                         Log.info("Screenshot ["+filename+"] successfully pushed", { processType: 'response' });
                     })
                     .catch(error => {
-                        Log.error(error.response.data.response.errors.message, { processType: 'response' });
+                        Log.error(error, { processType: 'response', customMessage: "Error on uploading Screenshot to Zoho People" });
                     });
 			});
         },

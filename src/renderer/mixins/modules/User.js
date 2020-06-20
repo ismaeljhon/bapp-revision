@@ -12,7 +12,7 @@ let User = {
                 return new RestApiService('/portal/' + process.env.VUE_APP_PORTAL_ID + '/users/').index().then(response => {
                     localStorage.setItem('ZOHO_USERS', JSON.stringify(response.data.users));
                 }).catch(error => {
-                    Log.error(error.data.error.message);
+                    Log.error(error, { processType: 'response', customMessage: 'Error on fetching zoho users' });
                 })
             }
             return true;

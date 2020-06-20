@@ -20,7 +20,7 @@ let Project = {
                     this.$store.commit("SET_PROJECTS", response.data.projects)
                     Log.success("Projects have been successfully fetched from API", { withPrompt: true, timer: 1500, processType: 'response' })
                 }).catch(error => {
-                    Log.error(error.response.data.message, { processType: 'response' })
+                    Log.error(error, { processType: 'response', customMessage: error.response.data.message})
                 });
             } else {
                 Log.info("Projects have been successfully fetched from LocalStorage", { processType: 'process' });
@@ -52,7 +52,7 @@ let Project = {
                     projectTasklists = _.union(projectTasklists, this.beautifyTaskListName(response.data.tasklists, params))
                     Log.success("Project Task Lists have been successfully fetched from API", { processType: 'response' })
                 }).catch(error => {
-                    Log.error(error.response.data.message + " - external task list", { processType: 'response' })
+                    Log.error(error, { processType: 'response', customMessage: error.response.data.message + " - external task list" })
                 });
 
                 localStorage.ZOHO_PROJECT_TASK_LISTS = JSON.stringify(projectTasklists);

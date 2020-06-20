@@ -56,7 +56,7 @@ export default {
                 Log.success("New Sub Task has been successfully saved", { withPrompt: true, processType: 'response', rawData: response.data })
             }).catch(error => {
                 this.isLoading = false;
-                Log.error(error.response.data.error.message, { processType: 'response' })
+                Log.error(error, { processType: 'response', customMessage: "Error on creating new subtask" })
             })
         }
     }

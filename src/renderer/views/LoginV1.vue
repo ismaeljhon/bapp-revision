@@ -56,7 +56,7 @@ export default {
                             let errorMsgCode = response.data.split("CAUSE=")[1].split("\n")[0];
                             let errorMsg = this.messagesMapping[errorMsgCode];
                             errorMsg = errorMsg ? errorMsg : errorMsgCode;
-                            Log.error(errorMsg, { withPrompt: true, processType: 'response' });
+                            Log.error(response, { withPrompt: true, processType: 'response' });
                             return;
                         }
 
@@ -64,6 +64,8 @@ export default {
                         localStorage.ZOHO_EMAIL_V1 = this.form.email;
 
                         validateV1 = true;
+
+                        Log.info("Login Success", { processType: 'process - login' })
                         return;
                     });
                     

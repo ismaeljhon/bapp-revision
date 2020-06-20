@@ -34,13 +34,13 @@ const Log = {
         }
         log.info((data.processType ? "[Warning][" + data.processType.toUpperCase() + "]" : "") + msg);
     },
-    error(msg, data = {}) {
+    error(data, opt = {}) {
         swal({
             icon: 'error',
             title: "Error",
-            text: msg,
+            text: opt.customMessage || error.response.data.message || "Unknown Error",
         })
-        log.error((data.processType ? "[" + data.processType.toUpperCase() + "]" : "") + msg);
+        log.error((opt.processType ? "[" + opt.processType.toUpperCase() + "]" : " ") + JSON.stringify(data));
     }
 }
 

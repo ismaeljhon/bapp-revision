@@ -56,7 +56,7 @@ export default {
                             this.$emit('saved');
                         }).catch(error => {
                             this.isLoading = false;
-                            Log.error(error.response.data.error.message, { processType: 'response' })
+                            Log.error(error, { processType: 'response', customMessage: "Error on creating new tasklist" })
                         })
                 }
             });

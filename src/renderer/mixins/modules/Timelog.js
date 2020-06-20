@@ -32,7 +32,7 @@ let Timelog = {
                         localStorage.ZOHO_LAST_TIME_LOG = '';
                         Log.success("Timelog has been successfully pushed", { rawData: rawData, timer: 1500, withPrompt: true, processType: 'response' })
                     }).catch(error => {
-                        Log.error(error.response.data.error.message);
+                        Log.error(error, { processType: 'response', customMessage: "Error on pushing your Timelog" });
                     });
         },
         getTimelogData(data) {
@@ -113,7 +113,7 @@ let Timelog = {
 
                     Log.info("Weekly Timelog successfully fetch " + JSON.stringify(timelogs), { processType: 'response' })
                 }).catch(error => {
-                    Log.error(error.response.data.error.message, { processType: 'response' });
+                    Log.error(error, { processType: 'response', customMessage: "Error on fetching weekly timelog" });
                 });;
         },
         getWeeklyTimelogs() {
@@ -139,7 +139,7 @@ let Timelog = {
 
                     Log.info("Daily Timelog successfully fetch " + JSON.stringify(timelogs), { processType: 'response' })
                 }).catch(error => {
-                    Log.error(error.response.data.error.message, { processType: 'response' });
+                    Log.error(error, { processType: 'response', customMessage: "Error on fetching weekly timelog" });
                 });
         },
         getDailyTimelogs() {
