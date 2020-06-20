@@ -12,7 +12,7 @@ const Log = {
             })
             swal(data);
         }
-        log.info((data.processType ? "[" + data.processType.toUpperCase() + "] " : "") + msg + JSON.stringify(data.rawData));
+        log.info((data.processType ? "[" + data.processType.toUpperCase() + "] " : "") + msg + JSON.stringify(data.rawData || ""));
     },
     info(msg, data = {}) {
         if (data.withPrompt) {
@@ -34,13 +34,16 @@ const Log = {
         }
         log.info((data.processType ? "[Warning][" + data.processType.toUpperCase() + "]" : "") + msg);
     },
-    error(data, opt = {}) {
-        swal({
-            icon: 'error',
-            title: "Error",
-            text: opt.customMessage || error.response.data.message || "Unknown Error",
-        })
-        log.error((opt.processType ? "[" + opt.processType.toUpperCase() + "]" : " ") + JSON.stringify(data));
+    error(rawData, opt = {}) {
+        if (opt.customMessage) {
+            swal({
+                icon: 'error',
+                title: "Error",
+                text: opt.customMessage || "Unknown Error",
+            })
+        }
+
+        log.error((opt.processType ? "[" + opt.processType.toUpperCase() + "]" : " ") + rawData.status + ": " + JSON.stringify(rawData.data));
     }
 }
 
