@@ -18,8 +18,10 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
+    title: 'Bickert Tracker App v1.5.1',
     height: 750,
     width: 480,
+    resizable: false,
     useContentSize: true,
     webPreferences: {
       webSecurity: false,
