@@ -34,7 +34,7 @@ const Log = {
         }
         log.info((data.processType ? "[Warning][" + data.processType.toUpperCase() + "]" : "") + msg);
     },
-    error(rawData, opt = {}) {
+    error(data, opt = {}) {
         if (opt.customMessage) {
             swal({
                 icon: 'error',
@@ -43,7 +43,7 @@ const Log = {
             })
         }
 
-        log.error((opt.processType ? "[" + opt.processType.toUpperCase() + "]" : " ") + rawData.status + ": " + JSON.stringify(rawData.data));
+        log.error((opt.processType ? "[" + opt.processType.toUpperCase() + "]" : " ") + JSON.stringify(data));
     }
 }
 

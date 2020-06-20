@@ -56,7 +56,7 @@ export default {
                             let errorMsgCode = response.data.split("CAUSE=")[1].split("\n")[0];
                             let errorMsg = this.messagesMapping[errorMsgCode];
                             errorMsg = errorMsg ? errorMsg : errorMsgCode;
-                            Log.error(response, { withPrompt: true, processType: 'response' });
+                            Log.error(response.data, { withPrompt: true, processType: 'response' });
                             return;
                         }
 
