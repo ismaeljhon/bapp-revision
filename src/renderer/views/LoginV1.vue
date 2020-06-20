@@ -7,7 +7,7 @@
             <b-form-group label="Password:" description="Use your zoho password here" :invalid-feedback="veeErrors.first('password')" :state="!veeErrors.has('password')">
                 <b-form-input type="password" v-model="form.password" name="password" v-validate="{ required: true }"></b-form-input>
             </b-form-group>
-            <b-button type="submit" variant="primary">Start Working</b-button>
+            <b-button type="submit" variant="primary" :disabled="isLoading">{{ isLoading ? "Loading..." : "Start Working" }}</b-button>
         </b-form>
     </b-card>
 </template>
@@ -21,6 +21,7 @@ export default {
     name: 'login-v1',
     data() {
         return {
+            isLoading: false,
             form: {
                 email: '',
                 password: '',
@@ -37,6 +38,8 @@ export default {
         onSubmit() {
             this.$validator.validateAll().then(async noerrors => {
                 if (noerrors) {
+                    this.isLoading = true
+
                     let validateV1 = false;
 
                     Log.info("Logging in...", { processType: 'request' })
@@ -56,7 +59,7 @@ export default {
                             let errorMsgCode = response.data.split("CAUSE=")[1].split("\n")[0];
                             let errorMsg = this.messagesMapping[errorMsgCode];
                             errorMsg = errorMsg ? errorMsg : errorMsgCode;
-                            Log.error(response.data, { withPrompt: true, processType: 'response' });
+                            Log.error(response.data, { withPrompt: true, processType: 'response', customMessage: errorMsg });
                             return;
                         }
 
@@ -68,6 +71,8 @@ export default {
                         Log.info("Login Success", { processType: 'process - login' })
                         return;
                     });
+
+                    this.isLoading = false
                     
                     if (!validateV1) {
                         return false
