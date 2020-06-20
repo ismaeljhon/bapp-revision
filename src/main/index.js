@@ -17,8 +17,11 @@ function createWindow () {
   /**
    * Initial window options
    */
+  const packageJson = require('../../package.json')
+  const _startCase = require('lodash').startCase
+
   mainWindow = new BrowserWindow({
-    title: 'Bickert Tracker App v1.5.1',
+    title: _startCase(packageJson.name) + " v" + packageJson.version,
     height: 750,
     width: 480,
     resizable: false,
