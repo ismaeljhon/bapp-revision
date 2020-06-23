@@ -24,12 +24,14 @@
 
         <timesheet-modal ref="timesheetModal" />
         <pending-timelog-modal />
+        <TokenHandler />
     </div>
 </template>
 
 <script>
 import TimesheetModal from '@/views/modals/Timesheet';
 import PendingTimelogModal from '@/views/modals/PendingTimelog'
+import TokenHandler from '@/views/modals/TokenHandler/TokenHandler.vue'
 
 const {app} = require('electron')
 import exec from 'await-exec';
@@ -38,7 +40,8 @@ export default {
     name: 'bickert-tracker-app',
     components: {
         TimesheetModal,
-        PendingTimelogModal
+        PendingTimelogModal,
+        TokenHandler
     },
     mounted: async function() {
         this.fetchProjects(true);
