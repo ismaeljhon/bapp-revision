@@ -88,6 +88,7 @@ export default {
     },
     mounted() {
         this.oauthFileHandler = new OauthFileHandler(this.form.oauthApplication)
+        this.oauthFileHandler.validateConfigFile()
     }
 }
 </script>
