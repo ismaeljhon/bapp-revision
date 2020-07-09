@@ -1,8 +1,10 @@
 import fs from 'fs'
 import OauthService from '@/services/OauthService'
+import Log from '@/shared/Log'
 
 export default class OauthFileHandler {
     constructor(serviceType) {
+        this.serviceType = serviceType
         this.config = require('@/config/' + serviceType + ".oauth.js").default
         this.configFile = this.config.config_file_path
         this.jsonFileContents = {}
@@ -17,7 +19,7 @@ export default class OauthFileHandler {
 
         let isTokenValid = await new OauthService(this.config, this.jsonFileContents).validateTokens()
 
-        console.log(isTokenValid)
+        Log.info("Token Validated: " + isTokenValid, { processType: 'process' })
 
         return fileExists && fileHasValidTokens && isTokenValid
     }
@@ -29,21 +31,21 @@ export default class OauthFileHandler {
             this.fileToVariable()
         }
 
-        console.log("file exists:", fileExists)
+        Log.info(this.serviceType + " Oauth File Exist: " + fileExists, { processType: 'process' })
         
         return fileExists;
     }
 
     fileToVariable(filePath = null) {
         let content = '';
-        console.log('current file path when fileToVariable is fired: ', this.configFile);
+        Log.info('Reading ' + this.serviceType + ' oauth file', { processType: 'process' });
 
         let file = filePath ? filePath : this.configFile
         try {
             content = fs.readFileSync(file);
             this.jsonFileContents = JSON.parse(content);
         } catch(err) {
-            console.log('Error reading JSON File', err);
+            Log.error(err, { processType: 'process', customMessage: 'Error reading ' + this.serviceType + ' JSON File' });
         }
     }
 
@@ -62,7 +64,9 @@ export default class OauthFileHandler {
                 return
             }
         })
-        console.log("required fields present: ", this.jsonFileContents, valid)
+        
+        Log.info('Required fields: ' + requiredKeys.join(', ') + " - " + valid, { processType: 'process' })
+
         return valid;
     }
 
@@ -70,7 +74,7 @@ export default class OauthFileHandler {
         let contents = fileContents ? fileContents : this.jsonFileContents
         return fs.writeFile(this.configFile, JSON.stringify(contents), function (err) {
             if (err) throw err;
-            console.log('Replaced!');
+            Log.success(this.serviceType + " oauth file replaced ", { withPrompt: true, processType: 'process' })
         });
     }
 }
