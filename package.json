@@ -34,7 +34,7 @@
       "screenshots/",
       "screenshots/*",
       "oauthkeys/",
-      "oauthkeys/bickert-timetracker.config.json",
+      "oauthkeys/*",
       ".env"
     ],
     "dmg": {
