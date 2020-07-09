@@ -1,11 +1,17 @@
 import axios from 'axios'
-import EnvStorageService from './EnvStorageService.js';
+import AccessTokenService from '@/services/AccessTokenService.js';
+import store from '@/store/index'
 
 let RestApiService = class RestApiService{
     constructor(prefix, noProjectPrefix = false) {
-        const storageService = EnvStorageService.getService();
+        
+        /** this is static for the meantime */
+        const zohoService = {
+            access_token: 'ZOHO_ACCESS_TOKEN'
+        }
 
-        // axios.defaults.headers.common['Authorization'] = 'Bearer ' + storageService.getAccessToken();
+        const accessTokenService = new AccessTokenService(zohoService);
+
         if (noProjectPrefix) {
             this.prefix = prefix;
         } else {
@@ -14,7 +20,7 @@ let RestApiService = class RestApiService{
 
         axios.interceptors.request.use(
             config => {
-                const token = storageService.getAccessToken();
+                const token = accessTokenService.get();
                 if (token) {
                     config.headers['Authorization'] = 'Bearer ' + token;
                 }
@@ -27,22 +33,24 @@ let RestApiService = class RestApiService{
 
         axios.interceptors.response.use((response) => {
             return response
-        }, function (error) {
+        }, async function (error) {
+
             const originalRequest = error.config;
             
             if (error.response.status === 401 && !originalRequest._retry) {
             
                 originalRequest._retry = true;
-                const refreshToken = storageService.getRefreshToken();
+                
+                const OauthFileHandler = require('@/shared/oauth/OauthFileHandler').default
+                
+                /** Use bickert time tracker config for the meantime */
+                let valid = await new OauthFileHandler('bickert-timetracker').validateConfigFile()
 
-                return axios.post(process.env.VUE_APP_ACCOUNTS_API + '/oauth/v2/token?grant_type=refresh_token&refresh_token=' + refreshToken + '&client_id=' + process.env.VUE_APP_CLIENT_ID + '&client_secret=' + process.env.VUE_APP_CLIENT_SECRET
-                )
-                    .then(res => {
-                        if (res.status === 201 || res.status === 200) {
-                            storageService.setToken(res.data);
-                            return axios(originalRequest);
-                        }
-                    })
+                store.commit('SET_OAUTH_KEY_ERROR', !valid)
+
+                if (valid) {
+                    return axios(originalRequest)
+                }
             }
             return Promise.reject(error);
         });
