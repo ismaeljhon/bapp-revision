@@ -48,7 +48,6 @@
 </template>
 <script>
 import RestApiService from '../services/RestApiService.js';
-import AuthenticationV1 from '@/helpers/AuthenticationV1'
 
 import LatestScreenshot from './partials/LatestScreenshot.vue'
 import TimelogSummary from './partials/TimelogSummary.vue';
@@ -246,18 +245,14 @@ export default {
         },
     },
     async mounted() {
-        if (!localStorage.ZOHO_ACCESS_TOKEN_V1) {
-            Log.error({}, { processType: 'process', customMessage: "No Authentication V1 key set, please reach out for some help" })
-            return false;
-        }
-        new AuthenticationV1().validate();
-
-        this.fetchWeeklyTimelogs();
-        this.fetchDailyTimelogs();
-        
         clearInterval(this.recordTimelogtoLocaInterval);
         clearInterval(this.screenshotInterval);
         this.setKeyboardShortcuts();
+
+        this.fetchProjects(true);
+        this.fetchUsers();
+        this.fetchWeeklyTimelogs();
+        this.fetchDailyTimelogs();
     }
 }
 </script>

@@ -24,7 +24,7 @@ function createWindow () {
     title: _startCase(packageJson.name) + " v" + packageJson.version,
     height: 750,
     width: 480,
-    resizable: false,
+    resizable: process.env.NODE_ENV == 'development',
     useContentSize: true,
     webPreferences: {
       webSecurity: false,

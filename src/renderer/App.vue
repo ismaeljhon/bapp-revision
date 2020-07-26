@@ -36,6 +36,9 @@
 import TimesheetModal from '@/views/modals/Timesheet';
 import PendingTimelogModal from '@/views/modals/PendingTimelog'
 import UpdateOauthKeysModal from '@/views/modals/UpdateOauthKeys.vue'
+import Log from '@/shared/Log'
+
+import AuthenticationV1 from '@/helpers/AuthenticationV1'
 
 const {app} = require('electron')
 import exec from 'await-exec';
@@ -48,8 +51,21 @@ export default {
         UpdateOauthKeysModal
     },
     mounted: async function() {
-        this.fetchProjects(true);
-        this.fetchUsers();
+        if (this.$route.path == "/loginV1") {
+            return
+        }
+
+        if (!localStorage.ZOHO_ACCESS_TOKEN_V1) {
+            Log.error({}, { processType: 'process', customMessage: "No Authentication V1 key set, please reach out for some help" })
+            return false;
+        }
+
+        let validate = await new AuthenticationV1().validate();
+        if (!validate) {
+            let message = "You need to re-login"
+            Log.error({ message: message }, { processType: 'info', customMessage: message })
+            return this.$router.push('/loginV1')
+        }
         
         if (process.platform == 'win32') {
             await exec(`if not exist "${process.env.VUE_APP_ZOHO_SCREENSHOT_FOLDER}" mkdir ${process.env.VUE_APP_ZOHO_SCREENSHOT_FOLDER}`)
