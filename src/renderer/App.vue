@@ -18,6 +18,10 @@
                         <font-awesome-icon icon="wrench"></font-awesome-icon> Update Keys
                     </b-dropdown-item>
                     <b-dropdown-divider></b-dropdown-divider>
+                    <b-dropdown-item @click.prevent="$refs.settingsModal.show()">
+                        <font-awesome-icon icon="sliders-h"></font-awesome-icon> Settings
+                    </b-dropdown-item>
+                    <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item @click.prevent="logout" :disabled="$store.getters.TIMER_STARTED"><font-awesome-icon icon="sign-out-alt"></font-awesome-icon> Logout</b-dropdown-item>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
@@ -29,6 +33,7 @@
         <timesheet-modal ref="timesheetModal" />
         <pending-timelog-modal />
         <update-oauth-keys-modal ref="updateKeysModal" />
+        <settings-modal ref="settingsModal" />
     </div>
 </template>
 
@@ -36,6 +41,7 @@
 import TimesheetModal from '@/views/modals/Timesheet';
 import PendingTimelogModal from '@/views/modals/PendingTimelog'
 import UpdateOauthKeysModal from '@/views/modals/UpdateOauthKeys.vue'
+import SettingsModal from '@/views/modals/Settings.vue'
 
 const {app} = require('electron')
 import exec from 'await-exec';
@@ -45,7 +51,8 @@ export default {
     components: {
         TimesheetModal,
         PendingTimelogModal,
-        UpdateOauthKeysModal
+        UpdateOauthKeysModal,
+        SettingsModal
     },
     mounted: async function() {
         this.fetchProjects(true);

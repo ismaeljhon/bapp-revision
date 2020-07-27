@@ -6,6 +6,7 @@ import _camelCase from 'lodash/camelCase';
 import moment from 'moment-timezone';
 import axios from 'axios';
 import Log from '@/shared/Log'
+import settingsJSON from "@/config/settings.json"
 
 let Screenshot = {
     methods: {
@@ -14,7 +15,7 @@ let Screenshot = {
 
             let manualFilename = isManual ? "-manual" : "";
             let currentUser =  this.getCurrentUser();
-            let screenshotFile = _camelCase(currentUser.name) +"-" + moment().format('DDMMYYYY-hhmmss') + manualFilename +".jpg";
+            let screenshotFile = _camelCase(currentUser.name) +"-" + moment().format('DDMMYYYY-HHmmss') + manualFilename +".jpg";
 
             let currentRootPath = rootPath;
 
@@ -37,6 +38,22 @@ let Screenshot = {
                 
                 this.pushScreenshot(screenshotFile)
             });
+        },
+
+        notifyScreenshot() {
+            if (!("Notification" in window)) {
+                alert("This browser does not support desktop notification");
+            } else if (Notification.permission === "granted") {
+                // If it's okay let's create a notification
+                var notification = new Notification("Screenshot Taken");
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(function (permission) {
+                    // If the user accepts, let's create a notification
+                    if (permission === "granted") {
+                        var notification = new Notification("Screenshot Taken");
+                    }
+                });
+            }
         },
 
         async pushScreenshot(filename) {
@@ -97,6 +114,9 @@ let Screenshot = {
                 Log.info("Screenshot file successfully retrieved " + filename, { processType: 'response' });
 
                 Log.info("Pushing Screenshot to Zoho People " + filename, { processType: 'request' });
+                if (settingsJSON.screenshot_notification) {
+                    this.notifyScreenshot();
+                }
 
 				// pushing the file to ZOHO People Files
 				await axiosInstance.post('https://people.zoho.com/people/api/files/uploadFileMultipart', formData, { 
