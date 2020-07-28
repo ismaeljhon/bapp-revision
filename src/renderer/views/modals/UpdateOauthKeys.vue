@@ -65,7 +65,7 @@ export default {
             })
         },
         redirectToOauthHandlerLink() {
-            let link = "https://bickertoauthhandler-713530616.development.zohocatalyst.com/app/#/authorize"
+            let link = "https://bickertoauthhandler-713530616.development.zohocatalyst.com/app/index.html#/authorize"
             let params = {
                 type: this.oauthHandlerType[this.form.oauthApplication]
             }
