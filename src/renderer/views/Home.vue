@@ -11,7 +11,7 @@
                         <a v-if="form.project" href="#" @click.prevent="$refs.taskFormModal.show(form.project)"><small><font-awesome-icon icon="plus"></font-awesome-icon> Add new task</small></a>
                     </div>
                 </template>
-                <v-select id="task-list" :disabled="$store.getters.TIMER_STARTED" label="name" :options="tasks" v-model="form.task" placeholder="Pick a Task" name="task" v-validate="{ required: true }" @input="getSubTasks"></v-select>
+                <v-select id="task-list" :disabled="$store.getters.TIMER_STARTED || isLoadingProjectTask" label="name" :options="tasks" v-model="form.task" placeholder="Pick a Task" name="task" v-validate="{ required: true }" @input="getSubTasks"></v-select>
             </b-form-group>
             <b-form-group v-if="form.task" label-for="sub-task">
                 <template slot="label">
@@ -20,7 +20,7 @@
                         <a v-if="form.task" href="#" @click.prevent="$refs.subTaskFormModal.show(form)"><small><font-awesome-icon icon="plus"></font-awesome-icon> Add new sub task</small></a>
                     </div>
                 </template>
-                <v-select id="sub-task" :disabled="$store.getters.TIMER_STARTED" label="name" :options="subTasks" v-model="form.subTask" placeholder="Pick a Sub Task"></v-select>
+                <v-select id="sub-task" :disabled="$store.getters.TIMER_STARTED || isLoadingProjectSubTask" label="name" :options="subTasks" v-model="form.subTask" placeholder="Pick a Sub Task"></v-select>
             </b-form-group>
             <b-form-group label="Notes">
                 <b-form-textarea :disabled="$store.getters.TIMER_STARTED" v-model="form.notes" rows="3" max-rows="6"></b-form-textarea>
@@ -87,6 +87,8 @@ export default {
             recordTimelogtoLocaInterval: null,
             screenshotInterval: null,
             isLoading: false,
+            isLoadingProjectTask: false,
+            isLoadingProjectSubTask: false,
         }
     },
     methods: {
@@ -137,7 +139,7 @@ export default {
                 }
             });
         },
-        getProjectTasks(project) {
+        async getProjectTasks(project) {
 
             _assign(this.form, {
                 task: '',
@@ -148,7 +150,9 @@ export default {
                 let currentUser = this.getCurrentUser();
 
                 Log.info("getProjectTasks - Project ID:" + project.id, { processType: 'request' })
-                new RestApiService('/portal/' + process.env.VUE_APP_PORTAL_ID + '/projects/' + project.id + "/tasks/").index({ owner: currentUser.id })
+                this.isLoadingProjectTask = true
+
+                await new RestApiService('/portal/' + process.env.VUE_APP_PORTAL_ID + '/projects/' + project.id + "/tasks/").index({ owner: currentUser.id })
                 .then(response => {
                     let tasks = [];
 
@@ -168,17 +172,21 @@ export default {
                 }).catch(error => {
                     Log.error(error, { processType: 'response', customMessage: 'Error on fetching tasks per project' })
                 })
+
+                this.isLoadingProjectTask = false
             }
         },
 
-        getSubTasks(task){
+        async getSubTasks(task){
             _assign(this.form, {
                 subTask: '',
             });
             
             if (task) {
+                this.isLoadingProjectSubTask = true
+
                 let currentUser = this.getCurrentUser();
-                new RestApiService(task.subTasksUrl, true).index({ owner: currentUser.id }).then(response => {
+                await new RestApiService(task.subTasksUrl, true).index({ owner: currentUser.id }).then(response => {
                     let subTasks = [];
                     _forEach(response.data.tasks, task => {
                         if (!task.completed && task.details && task.details.owners && _find(task.details.owners, o => { return o.id == currentUser.id })) {
@@ -192,6 +200,8 @@ export default {
                 }).catch(error => {
                     Log.error(error, { processType: 'response', customMessage: 'Error on fetching sub tasks' });
                 });
+
+                this.isLoadingProjectSubTask = false
             }
         },
 
