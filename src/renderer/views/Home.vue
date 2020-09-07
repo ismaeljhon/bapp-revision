@@ -152,7 +152,11 @@ export default {
                 Log.info("getProjectTasks - Project ID:" + project.id, { processType: 'request' })
                 this.isLoadingProjectTask = true
 
-                await new RestApiService('/portal/' + process.env.VUE_APP_PORTAL_ID + '/projects/' + project.id + "/tasks/").index({ owner: currentUser.id })
+                await new RestApiService('/portal/' + process.env.VUE_APP_PORTAL_ID + '/projects/' + project.id + "/tasks/").index({ 
+                    owner: currentUser.id, 
+                    index: 0, 
+                    range: 1000
+                })
                 .then(response => {
                     let tasks = [];
 
