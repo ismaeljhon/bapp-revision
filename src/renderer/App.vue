@@ -18,6 +18,10 @@
                         <font-awesome-icon icon="wrench"></font-awesome-icon> Update Keys
                     </b-dropdown-item>
                     <b-dropdown-divider></b-dropdown-divider>
+                    <b-dropdown-item @click.prevent="showDeveloperTools">
+                        <font-awesome-icon icon="hammer"></font-awesome-icon> Show Developer Tools
+                    </b-dropdown-item>
+                    <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item @click.prevent="logout" :disabled="$store.getters.TIMER_STARTED"><font-awesome-icon icon="sign-out-alt"></font-awesome-icon> Logout</b-dropdown-item>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
@@ -40,7 +44,6 @@ import Log from '@/shared/Log'
 
 import AuthenticationV1 from '@/helpers/AuthenticationV1'
 
-const {app} = require('electron')
 import exec from 'await-exec';
 
 export default {
@@ -94,6 +97,9 @@ export default {
             });
             
         },
+        showDeveloperTools() {
+            require('electron').remote.getCurrentWindow().webContents.openDevTools()
+        }
     }
   }
 </script>
