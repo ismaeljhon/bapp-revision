@@ -11,6 +11,7 @@ let User = {
             if (!localStorage.ZOHO_USERS) {
                 return new RestApiService('/portal/' + process.env.VUE_APP_PORTAL_ID + '/users/').index().then(response => {
                     localStorage.setItem('ZOHO_USERS', JSON.stringify(response.data.users));
+                    console.log("Zoho Project Users", response.data.users)
                 }).catch(error => {
                     Log.error(error, { processType: 'response', customMessage: 'Error on fetching zoho users' });
                 })

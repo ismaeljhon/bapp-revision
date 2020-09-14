@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Log from '@/shared/Log';
 import _find from 'lodash/find';
-import Employees from '@/assets/Employees';
+import Employees from '@/assets/employees';
 
 class AuthenticationV1 {
 	constructor(params) {
