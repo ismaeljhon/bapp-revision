@@ -78,7 +78,7 @@ export default {
                         return false
                     }
 
-                    let users = this.getUsers();
+                    let users = await this.getUsers();
                     let currentUser = _find(users, o => { return o.email == this.form.email });
 
                     if (currentUser) {

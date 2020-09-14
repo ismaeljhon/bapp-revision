@@ -18,7 +18,10 @@ let User = {
             }
             return true;
         },
-        getUsers() {
+        async getUsers() {
+            if (!localStorage.ZOHO_USERS)
+                await this.fetchUsers()
+
             return JSON.parse(localStorage.ZOHO_USERS);
         },
         getCurrentUser() {
