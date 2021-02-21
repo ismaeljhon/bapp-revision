@@ -16,3 +16,4 @@ screenshots/*
 !screenshots/log.txt
 
 oauthkeys/*
+!oauthkeys/readme.txt
