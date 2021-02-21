@@ -15,6 +15,7 @@ let RestApiService = class RestApiService{
         if (noProjectPrefix) {
             this.prefix = prefix;
         } else {
+            /** @todo create an object to map the base_url */
             this.prefix = process.env.VUE_APP_PROJECTS_API + prefix
         }
 
@@ -60,13 +61,13 @@ let RestApiService = class RestApiService{
         return axios.get(this.prefix, { params: params })
     }
 
-    save(data, isQueryType = false) {
+    save(data, isQueryType = false, headers = {}) {
 
         if (isQueryType) {
-            return axios.post(this.prefix, null, data);
+            return axios.post(this.prefix, null, data, { headers: headers });
         }
 
-        return axios.post(this.prefix, data)
+        return axios.post(this.prefix, data, { headers: headers })
     }
 
     delete(id) {
