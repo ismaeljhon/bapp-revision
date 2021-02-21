@@ -35,13 +35,15 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$validator.validateAll().then((noerrors) => {
+      this.$validator.validateAll().then(async (noerrors) => {
         if (noerrors) {
-          let users = this.getUsers();
+          let users = await this.getUsersFromZohoPeople();
 
           let currentUser = _find(users, (o) => {
-            return o.email == this.form.email;
+            return o["Email ID"] == this.form.email;
           });
+
+          console.log(users)
 
           if (currentUser) {
             localStorage.ZOHO_CURRENT_USER = JSON.stringify(currentUser);
@@ -57,8 +59,8 @@ export default {
   },
   mounted: async function() {
     this.disableBtn = true;
-    await this.fetchUsers();
-    this.users = localStorage.ZOHO_USERS;
+    await this.fetchUsersFromZohoPeople();
+    this.users = localStorage.ZOHO_PEOPLE_USERS;
     this.disableBtn = false;
   },
 };

@@ -21,7 +21,10 @@
           <template slot="text"
             ><font-awesome-icon icon="cog"
           /></template>
-          <b-dropdown-item @click.prevent="$refs.timesheetModal.show()">
+          <b-dropdown-item
+            @click.prevent="$refs.timesheetModal.show()"
+            v-if="this.isLoggedIn()"
+          >
             <font-awesome-icon icon="calendar-alt"></font-awesome-icon>
             Timesheet
           </b-dropdown-item>
@@ -39,6 +42,7 @@
           </b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider>
           <b-dropdown-item
+            v-if="this.isLoggedIn()"
             @click.prevent="logout"
             :disabled="$store.getters.TIMER_STARTED"
             ><font-awesome-icon icon="sign-out-alt"></font-awesome-icon>
@@ -63,7 +67,7 @@ import PendingTimelogModal from "@/views/modals/PendingTimelog";
 import UpdateOauthKeysModal from "@/views/modals/UpdateOauthKeys.vue";
 import Log from "@/shared/Log";
 
-import AuthenticationV1 from "@/helpers/AuthenticationV1";
+import Authentication from "@/helpers/Authentication";
 
 import exec from "await-exec";
 
@@ -75,30 +79,25 @@ export default {
     UpdateOauthKeysModal,
   },
   mounted: async function() {
-    if (this.$route.path == "/loginV1") {
+    if (this.$route.path == "/login") {
       return;
     }
 
-    if (!localStorage.ZOHO_ACCESS_TOKEN_V1) {
-      Log.error(
-        {},
-        {
-          processType: "process",
-          customMessage:
-            "No Authentication V1 key set, please reach out for some help",
-        }
-      );
-      return false;
-    }
+    let validate = await new Authentication().validate();
 
-    let validate = await new AuthenticationV1().validate();
+    console.log("validate", validate)
     if (!validate) {
-      let message = "You need to re-login";
+        console.log("You need to login")
+      let message = "You need to login";
       Log.error(
         { message: message },
         { processType: "info", customMessage: message }
       );
-      return this.$router.push("/loginV1");
+      return this.$router.push("/login");
+    } else {
+        this.$router.push("/")
+
+        console.log("go to home")
     }
 
     if (process.platform == "win32") {
@@ -128,8 +127,7 @@ export default {
         dangerMode: true,
       }).then((loggedOut) => {
         if (loggedOut) {
-          (localStorage.ZOHO_CURRENT_USER_V1 = ""),
-            this.$router.push("/loginV1");
+          (localStorage.ZOHO_PEOPLE_USERS = ""), this.$router.push("/login");
         }
       });
     },

@@ -8,24 +8,19 @@ const router = new Router({
         {
             path: '/login',
             name: 'login',
-            component: require('@/views/Login').default
-        },
-        {
-            path: '/loginV1',
-            name: 'loginV1',
-            component: require('@/views/LoginV1').default
+            component: () => import('@/views/Login.vue')
         },
         {
             path: '/',
             name: 'home',
-            component: require('@/views/Home').default
+            component: () => import('@/views/Home.vue')
         },
 	]
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.fullPath != '/loginV1' && !localStorage.ZOHO_ACCESS_TOKEN_V1) {
-        next('/loginV1');
+    if (to.fullPath != '/login' && !localStorage.ZOHO_PEOPLE_USERS) {
+        next('/login');
     }
     next();
 })
