@@ -1,80 +1,105 @@
-import fs from 'fs'
-import OauthService from '@/services/OauthService'
-import Log from '@/shared/Log'
+import fs from "fs";
+import OauthService from "@/services/OauthService";
+import Log from "@/shared/Log";
 
 export default class OauthFileHandler {
-    constructor(serviceType) {
-        this.serviceType = serviceType
-        this.config = require('@/config/' + serviceType + ".oauth.js").default
-        this.configFile = this.config.config_file_path
-        this.jsonFileContents = {}
-    }
-    async validateConfigFile(file = null) {
-        let fileExists = await this.checkFile()
-        
-        let configFile = file ? file : this.configFile
-        this.fileToVariable(configFile)
-        
-        let fileHasValidTokens = await this.fileHasTokens()
+  constructor(serviceType) {
+    this.serviceType = serviceType;
+    this.config = require("@/config/" + serviceType + ".oauth.js").default;
+    this.configFile = this.config.config_file_path;
+    this.jsonFileContents = {};
+  }
+  async validateConfigFile(file = null) {
+    let fileExists = await this.checkFile();
 
-        let isTokenValid = await new OauthService(this.config, this.jsonFileContents).validateTokens()
+    let configFile = file ? file : this.configFile;
+    this.fileToVariable(configFile);
 
-        Log.info("Token Validated: " + isTokenValid, { processType: 'process' })
+    let fileHasValidTokens = await this.fileHasTokens();
 
-        return fileExists && fileHasValidTokens && isTokenValid
-    }
+    Log.info("Token Validated: " + this.isTokenValid(), { processType: "process" });
 
-    checkFile() {
-        var fileExists = fs.existsSync(this.configFile);
+    return fileExists && fileHasValidTokens && this.isTokenValid();
+  }
 
-        if (fileExists) {
-            this.fileToVariable()
-        }
+  async isTokenValid() {
+    const isTokenValid = await new OauthService(
+      this.config,
+      this.jsonFileContents
+    ).validateTokens();
 
-        Log.info(this.serviceType + " Oauth File Exist: " + fileExists, { processType: 'process' })
-        
-        return fileExists;
-    }
+    return isTokenValid
+  }
 
-    fileToVariable(filePath = null) {
-        let content = '';
-        Log.info('Reading ' + this.serviceType + ' oauth file', { processType: 'process' });
+  checkFile() {
+    var fileExists = fs.existsSync(this.configFile);
 
-        let file = filePath ? filePath : this.configFile
-        try {
-            content = fs.readFileSync(file);
-            this.jsonFileContents = JSON.parse(content);
-        } catch(err) {
-            Log.error(err, { processType: 'process', customMessage: 'Error reading ' + this.serviceType + ' JSON File' });
-        }
+    if (fileExists) {
+      this.fileToVariable();
     }
 
-    getKeys() {
-        return this.jsonFileContents
+    Log.info(this.serviceType + " Oauth File Exist: " + fileExists, {
+      processType: "process",
+    });
+
+    return fileExists;
+  }
+
+  fileToVariable(filePath = null) {
+    let content = "";
+    Log.info("Reading " + this.serviceType + " oauth file", {
+      processType: "process",
+    });
+
+    let file = filePath ? filePath : this.configFile;
+    try {
+      content = fs.readFileSync(file);
+      this.jsonFileContents = JSON.parse(content);
+    } catch (err) {
+      Log.error(err, {
+        processType: "process",
+        customMessage: "Error reading " + this.serviceType + " JSON File",
+      });
     }
+  }
 
-    fileHasTokens() {
-        let valid = true
-        let requiredKeys = ['refresh_token', 'client_id', 'client_secret']
-        const _forEach = require('lodash/forEach')
+  getKeys() {
+    return this.jsonFileContents;
+  }
 
-        _forEach(requiredKeys, key => {
-            if (!this.jsonFileContents[key]) {
-                valid = false
-                return
-            }
-        })
-        
-        Log.info('Required fields: ' + requiredKeys.join(', ') + " - " + valid, { processType: 'process' })
+  fileHasTokens() {
+    let valid = true;
+    let requiredKeys = ["refresh_token", "client_id", "client_secret"];
+    const _forEach = require("lodash/forEach");
 
-        return valid;
-    }
+    _forEach(requiredKeys, (key) => {
+      if (!this.jsonFileContents[key]) {
+        valid = false;
+        return;
+      }
+    });
 
-    saveToFile(fileContents) {
-        let contents = fileContents ? fileContents : this.jsonFileContents
-        return fs.writeFile(this.configFile, JSON.stringify(contents), function (err) {
-            if (err) throw err;
-            Log.success(this.serviceType + " oauth file replaced ", { withPrompt: true, processType: 'process' })
+    Log.info("Required fields: " + requiredKeys.join(", ") + " - " + valid, {
+      processType: "process",
+    });
+
+    return valid;
+  }
+
+  saveToFile(fileContents) {
+    let contents = fileContents ? fileContents : this.jsonFileContents;
+    
+    return fs.writeFile(
+      this.configFile,
+      JSON.stringify(contents),
+      { flag: "w+" },
+      function(err) {
+        if (err) throw err;
+        Log.success(this.serviceType + " oauth file replaced ", {
+          withPrompt: true,
+          processType: "process",
         });
-    }
+      }
+    );
+  }
 }

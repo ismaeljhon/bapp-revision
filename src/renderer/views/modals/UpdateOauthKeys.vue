@@ -73,7 +73,11 @@ export default {
         },
         async onSubmit() {
             this.isLoading = true
-            let valid = await this.oauthFileHandler.validateConfigFile(this.form.file.path)
+
+            /** Validate and create file in behalf */
+            await this.oauthFileHandler.validateConfigFile(this.form.file.path)
+
+            const valid = await this.oauthFileHandler.isTokenValid()
 
             this.$store.commit('SET_OAUTH_KEY_ERROR', !valid)
 
