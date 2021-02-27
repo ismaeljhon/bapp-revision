@@ -147,7 +147,7 @@ export default {
             })
 
             if (project) {
-                let currentUser = this.getCurrentUser();
+                let currentUser = this.getCurrentZohoProjectUser();
 
                 Log.info("getProjectTasks - Project ID:" + project.id, { processType: 'request' })
                 this.isLoadingProjectTask = true

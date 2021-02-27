@@ -28,6 +28,7 @@ let User = {
   methods: {
     getCurrentUser,
     getUsersFromZohoPeople,
+    getCurrentZohoProjectUser,
     isLoggedIn() {
       return localStorage.ZOHO_CURRENT_USER ? true : false;
     },
