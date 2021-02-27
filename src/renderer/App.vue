@@ -18,9 +18,13 @@
       </b-navbar-brand>
       <b-navbar-nav class="ml-auto">
         <b-nav-item-dropdown right>
-          <template slot="text"
-            ><font-awesome-icon icon="cog"
-          /></template>
+          <template slot="text">
+            <font-awesome-icon icon="cog" />
+          </template>
+          <b-dropdown-item v-if="this.isLoggedIn()">
+            <small class="mt-2" v-if="currentUserName">Logged in as: {{ currentUserName }}</small>
+          </b-dropdown-item>
+          <b-dropdown-divider></b-dropdown-divider>
           <b-dropdown-item
             @click.prevent="$refs.timesheetModal.show()"
             v-if="this.isLoggedIn()"
@@ -78,6 +82,12 @@ export default {
     PendingTimelogModal,
     UpdateOauthKeysModal,
   },
+  computed: {
+    currentUserName() {
+      const currentUser = this.getCurrentUser();
+      return currentUser ? currentUser.ownerName : "";
+    },
+  },
   mounted: async function() {
     if (this.$route.path == "/login") {
       return;
@@ -85,9 +95,9 @@ export default {
 
     let validate = await new Authentication().validate();
 
-    console.log("validate", validate)
+    console.log("validate", validate);
     if (!validate) {
-        console.log("You need to login")
+      console.log("You need to login");
       let message = "You need to login";
       Log.error(
         { message: message },
@@ -95,9 +105,9 @@ export default {
       );
       return this.$router.push("/login");
     } else {
-        this.$router.push("/")
+      this.$router.push("/");
 
-        console.log("go to home")
+      console.log("go to home");
     }
 
     if (process.platform == "win32") {
