@@ -16,7 +16,10 @@ export default class OauthService {
             client_id: this.oauthKeys.client_id,
             client_secret: this.oauthKeys.client_secret
         }
-        return axios.post(this.config.base_url + this.config.url.refresh_token + "?" + queryString.stringify(params)).then(response => {
+
+        const axiosForRefreshToken = axios.create();
+
+        return axiosForRefreshToken.post(`${this.config.base_url + this.config.url.refresh_token}?${queryString.stringify(params)}`).then(response => {
             new AccessTokenService({ access_token: 'ZOHO_ACCESS_TOKEN' }).set(response.data)
             return response
         })
