@@ -189,7 +189,7 @@ export default {
             if (task) {
                 this.isLoadingProjectSubTask = true
 
-                let currentUser = this.getCurrentUser();
+                let currentUser = this.getCurrentZohoProjectUser();
                 await new RestApiService(task.subTasksUrl, true).index({ owner: currentUser.id }).then(response => {
                     let subTasks = [];
                     _forEach(response.data.tasks, task => {

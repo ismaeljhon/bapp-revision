@@ -43,7 +43,7 @@ export default {
         },
         onSubmit() {
             this.isLoading = true;
-            let currentUser = this.getCurrentUser();
+            let currentUser = this.getCurrentZohoProjectUser();
             this.form.person_responsible = currentUser.id
 
             Log.info("Adding new task...", { processType: 'request' })
