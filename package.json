@@ -76,7 +76,7 @@
     "dotenv": "^8.1.0",
     "electron-log": "^4.0.7",
     "electron-root-path": "^1.0.9",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
     "screenshot-monitor-capture": "^0.8.3",
