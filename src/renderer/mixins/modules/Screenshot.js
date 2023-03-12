@@ -145,28 +145,7 @@ let Screenshot = {
               processType: "response",
               customMessage: "Error on uploading Screenshot to Zoho People",
             });
-          });;
-
-          // pushing the file to ZOHO People Files
-        //   await axiosInstance
-        //     .post(
-        //       "https://people.zoho.com/people/api/files/uploadFileMultipart",
-        //       formData,
-        //       {
-        //         headers: { "Content-Type": "multipart/form-data" },
-        //       }
-        //     )
-        //     .then((response) => {
-        //       Log.info("Screenshot [" + filename + "] successfully pushed", {
-        //         processType: "response",
-        //       });
-        //     })
-        //     .catch((error) => {
-        //       Log.error(error, {
-        //         processType: "response",
-        //         customMessage: "Error on uploading Screenshot to Zoho People",
-        //       });
-        //     });
+          });
         });
     },
   },
