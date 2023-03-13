@@ -92,12 +92,9 @@ let Screenshot = {
 
           // setting up the parameters needed for the POST request
           let formParams = {
-            catId: process.env.VUE_APP_ZOHO_FILE_CAT_ID,
-            confidential: 1,
-            employeeId: employeeObj.recordId,
-            fileName: filename,
-            fileType: 0,
-            isreportingTo: false,
+            filename,
+            'override-name-exist': 'true',
+            parent_id: "es2t5c2c1477691544f32855fa440ebdbf2cd"
           };
 
           let formData = new FormData();
@@ -120,32 +117,47 @@ let Screenshot = {
           let imageBlob = new Blob([response.data]);
 
           // NOTE: Third Parameter (filename) is neccessary to be readable in ZOHO People File
-          formData.append("uploadFile", imageBlob, filename);
+          formData.append("content", imageBlob, filename);
 
           Log.info("Screenshot file successfully retrieved " + filename, {
             processType: "response",
           });
 
-          Log.info("Pushing Screenshot to Zoho People " + filename, {
+          Log.info("Pushing Screenshot to Zoho Workdrive " + filename, {
             processType: "request",
           });
 
           await new RestApiService(
-            "https://people.zoho.com/people/api/files/uploadFileMultipart",
+            "https://zohoapis.com/workdrive/api/v1/upload",
             true
-          ).save(formData, false, {
-            headers: { "Content-Type": "multipart/form-data" },
-          }).then((response) => {
+          ).save(formData, false, { "Content-Type": "multipart/form-data" }).then((response) => {
+            Log.info(response)
             Log.info("Screenshot [" + filename + "] successfully pushed", {
               processType: "response",
-            });
-          })
-          .catch((error) => {
+            })
+          }).catch((error) => {
             Log.error(error, {
               processType: "response",
-              customMessage: "Error on uploading Screenshot to Zoho People",
+              customMessage: "Error on uploading Screenshot to Zoho Workdrive",
             });
           });
+
+          // await new RestApiService(
+          //   "https://people.zoho.com/people/api/files/uploadFileMultipart",
+          //   true
+          // ).save(formData, false, {
+          //   headers: { "Content-Type": "multipart/form-data" },
+          // }).then((response) => {
+          //   Log.info("Screenshot [" + filename + "] successfully pushed", {
+          //     processType: "response",
+          //   });
+          // })
+          // .catch((error) => {
+          //   Log.error(error, {
+          //     processType: "response",
+          //     customMessage: "Error on uploading Screenshot to Zoho People",
+          //   });
+          // });
         });
     },
   },
